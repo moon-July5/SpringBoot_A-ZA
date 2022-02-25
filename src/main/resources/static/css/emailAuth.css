@@ -1,0 +1,18 @@
+.email__Auth{
+    margin: 60px 40px 0 200px;
+    padding: 20px 0 0 10px;
+}
+.email__Auth__content p{
+    font-family: 'cookie';
+    font-size: 1.5em;
+}
+.email__send__button{
+    background-color: black;
+    color: white;
+    width: 200px;
+    border: none;
+}
+.email__send__button:hover{
+    background-color: #333333;
+    cursor: pointer;
+}

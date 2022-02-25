@@ -1,0 +1,40 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/basic}">
+    <head>
+        <link rel="stylesheet" th:href="@{/css/signup.css}">
+    </head>
+    <th:block layout:fragment="content">
+        <div class="signup">
+            <div class="signup__top">
+                <h1>회원가입</h1>
+            </div>
+            <div class="signup__container">
+                <form th:action="@{/user/signup}" method="post" modelAttribute="userDTO">
+                    <div class="form-group required">
+                        <label style="font-weight:bold; margin-bottom:5px;">아이디</label>
+                        <input type="text" class="form-control" name="id" th:value="${userDTO.id}" placeholder="아이디를 입력해주세요">
+                        <span th:text="${valid_id}"></span><br>
+                    </div>
+                    <div class="form-group required">
+                        <label style="font-weight:bold; margin-bottom:5px;">비밀번호</label>
+                        <input type="password" class="form-control" name="password" th:value="${userDTO.password}" placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요." required>
+                        <span th:text="${valid_password}"></span><br>
+                    </div>
+                    <div class="form-group required">
+                        <label style="font-weight:bold; margin-bottom:5px;">닉네임</label>
+                        <input type="text" class="form-control" name="nickname" th:value="${userDTO.nickname}" placeholder="닉네임은 특수문자를 제외한 2~12자리여야 합니다." required>
+                        <span th:text="${valid_nickname}"></span><br>
+                    </div>
+                    <div class="form-group required">
+                        <label style="font-weight:bold; margin-bottom:5px;">이메일</label>
+                        <input type="text" class="form-control" name="email" th:value="${userDTO.email}" placeholder="이메일 주소를 입력해주세요" required>
+                        <span th:text="${valid_email}"></span><br>
+                    </div>
+                    <button type="button" th:onclick="|location.href='@{/aza/index}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}"> 홈 화면으로</button>
+                    <button type="submit" class="btn btn-primary signupButton"><img class="button__icon" th:src="@{/imgs/signup-icon-white.png}">회원가입</button>
+                </form>
+            </div>
+        </div>
+    </th:block>
+</html>

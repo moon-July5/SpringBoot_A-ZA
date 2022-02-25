@@ -1,0 +1,135 @@
+/*header 부분*/
+.header{
+    font-family: 'cookie';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(18, 51, 90);
+    box-shadow: 0 0 3px #000;
+    z-index: 20;
+}
+.header__wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 16px;
+}
+.header__start{
+    height: 40px;
+    line-height: 40px;
+}
+.header__start a{
+    text-decoration: none;
+}
+.header__title{
+    
+    font-size : 65px;
+    color:white;
+}
+.header__center{
+    width:50%;
+}
+.header__form{
+    display: flex;
+    max-width: 100%;
+}
+.header__select .header__select--type{
+    height: 40px;
+    margin-right: 2px;
+    border-right: none;
+    border-radius: 2px;
+    border : 1px solid #8f8f8f;
+
+}
+.header__input--text{
+    width: calc(100% - 60px);
+    height: 40px;
+    padding: 0 6px;
+    border: 1px solid #8f8f8f;
+    border-right: none;
+    border-radius: 2px 0 0 2px;
+}
+  .header__input--button{
+    width: 60px;
+    height: 40px;
+    border: 1px solid #8f8f8f;
+    border-left: none;
+    border-radius: 0 2px 2px 0;
+  }
+  .header__end{
+    display: flex;
+  }
+  .header__search{
+    display: none;
+    margin-right: 5px;
+    border: none;
+    background-color: transparent;
+    font-size: 1.5rem;
+  }
+  @media screen and (max-width: 800px){
+    .header__title{
+      display: none;
+    }
+  }
+  
+  @media screen and (max-width: 400px){
+    .header__center{
+      display: none;
+    }
+    .header__search{
+      display: block;
+    }
+  }
+
+/*nav 부분*/
+.nav{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;    
+}
+.nav__wrapper{
+    min-width: 200px;
+    min-height: 100vh;
+    background-color: #f8f8f8;
+    padding: 80px 0 0 0;
+    list-style: none;
+}
+.nav__wrapper li {
+    display: flex;
+    padding: 10px 16px 10px;
+}
+.nav__wrapper li:hover{
+    background-color: #eaeaea;
+}
+.nav__icon{
+    border: none;
+    background-color: transparent;
+    font-size: 1.5rem;
+}
+.nav__icon .nav__img{
+    width:1.3rem;
+    height: 1.3rem;
+}
+.nav__menu{
+    margin: 0 0 0 8px;
+    font-size: 1.2rem;
+    border: none;
+    background-color: transparent;
+}
+@media screen and (max-width: 800px) {
+    .nav__menu{
+        display: none;
+    }
+    .nav__wrapper{
+        min-width: 0;
+    }
+}
+@media screen and (max-width: 400px) {
+    .nav__wrapper{
+        display: none;
+    }
+}
+

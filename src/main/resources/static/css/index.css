@@ -1,0 +1,39 @@
+/*content 영역*/
+.content{
+    margin: 60px 40px 0 200px;
+    padding: 20px 0 0 10px;
+}
+.content__top{
+    font-family: 'cookie';
+    font-size : 1.8rem;
+    margin-bottom : 15px;
+    display: flex;
+    justify-content: space-between;
+
+}
+.content__center{
+    font-family: 'cookie';
+    width : 80vw;
+    height : 67vh;
+    background-color: #f5f5f5;
+    box-shadow: 3px 3px 5px;
+}
+
+.content__end{
+    font-family: 'cookie';
+    margin-top: 23px;
+}
+.content__button{
+    padding: 0px 20px;
+    border: 3px solid #4169e1;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    color: #4169e1;
+    background-color: #fff;
+   
+}
+.content__button:hover{
+    cursor: pointer;
+    background-color: #4169e1;
+    color : #fff;
+}

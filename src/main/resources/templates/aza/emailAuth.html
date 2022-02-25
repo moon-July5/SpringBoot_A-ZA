@@ -1,0 +1,43 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{/layout/basic}">
+      <head>
+          <link rel="stylesheet" th:href="@{/css/emailAuth.css}">
+      </head>
+      <th:block layout:fragment="content">
+          <div class="email__Auth">
+            <sec:authorize access="isAuthenticated()">
+                <sec:authentication property="principal" var="user" />
+                <form id="email_form">
+                    <input type="hidden" name="certified" th:value="${user.certified}">
+                    <input type="hidden" name="email" th:value="${user.email}">
+                    <input type="hidden" name="id" th:value="${user.username}">												
+                </form>
+            </sec:authorize>
+            <div class="email__Auth__content">
+                <p>A-ZA 회원가입을 해주셔서 감사합니다.<br><br>
+                회원가입 완료를 위해 이메일 인증을 해주시길 바랍니다.</p><br><br>
+            </div>
+            <button class="email__send__button">이메일 인증하기</button>
+          </div>
+          <!-- js -->
+          <script type="text/javascript" th:inline="javascript">
+              $(document).ready(function(){
+                $('.email__send__button').click(function(){
+                    $.ajax({
+                        url : '/user/email/send',
+                        type : 'GET',
+                        data : $('#email_form').serialize(),
+                        success : function(){
+                            alert('이메일 전송이 완료 되었습니다.');
+                        },
+                        error : function(e){
+                            console.log(e);
+                        }
+                    })
+                });
+              });
+          </script>
+      </th:block>
+</html>

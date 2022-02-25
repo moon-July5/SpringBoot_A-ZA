@@ -1,0 +1,19 @@
+<!--head 부분으로 각종 css나 js파일을 모아둠-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="headFrag">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AZA!!</title>
+        <link rel="stylesheet" th:href="@{/css/main.css}">
+        <link rel="stylesheet" th:href="@{/css/reset.css}">
+        <link rel="stylesheet" th:href="@{/css/bootstrap-css/bootstrap.min.css}">
+        <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+        <script th:src="@{/js/header.js}"></script>
+        <script th:src="@{/js/bootstrap-js/bootstrap.bundle.min.js}"></script>
+    </head>
+</th:block>
+</html>

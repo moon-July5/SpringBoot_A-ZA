@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout/basic}">
+    <head>
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+    </head>
+    <th:block layout:fragment="content">
+      <!--게시판 영역-->
+      <section class="content">
+        <div class="content__top">
+          <h1>게시판</h1>
+          <button class="content__button">글쓰기</button>
+        </div>
+        <div class="content__center">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>날짜</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>테스트</td>
+                <td>테스트</td>
+                <td>2022.2.22</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>테스트2</td>
+                <td>테스트2</td>
+                <td>2022.2.22</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="content__end">
+        </div>
+      </section>
+
+    </th:block>
+</html>

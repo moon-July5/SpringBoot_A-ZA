@@ -1,0 +1,71 @@
+<!--header 부분을 나타냄-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="headerFrag"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+        <!--Header -->
+        <header class="header">
+            <div class="header__wrapper">
+                <h1 class="header__start">
+                    <a th:href="@{/aza/index}"><span class="header__title">A-ZA</span></a>
+                </h1>
+                <div class="header__center">
+                    <form class="header__form" onsubmit="return false;">
+                        <div class="header__select">
+                            <select name="type" class="header__select--type">
+                                <option value="tc">제목+내용</option>
+                                <option value="t" >제목</option>
+                                <option value="c" >내용</option>
+                                <option value="w" >작성자</option>
+                            </select>
+                        </div>
+                        <input class="header__input--text" placeholder="게시글 검색">
+                        <button class="header__input--button">검색</button>
+                    </form>
+                </div>
+                <div class="header__end">
+                    <button class="header__search">&#128269;</button>
+                </div>
+            </div>
+        </header>
+
+        <!--메뉴 부분-->
+        <nav class="nav">
+            <ul class="nav__wrapper">
+                <li sec:authorize="isAnonymous()">
+                    <button class="nav__icon" th:onclick="|location.href='@{/user/signup}'|"><img class="nav__img" th:src="@{/imgs/signup-icon.jpg}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/user/signup}'|">회원가입</button>
+                </li>
+                <li sec:authorize="isAnonymous()">
+                    <button class="nav__icon" th:onclick="|location.href='@{/user/login}'|"><img class="nav__img" th:src="@{/imgs/login-icon.png}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/user/login}'|">로그인</button>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <button class="nav__icon" th:onclick="|location.href='@{/user/logout}'|"><img class="nav__img" th:src="@{/imgs/logout-icon.png}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/user/logout}'|">로그아웃</button>
+                </li>
+            </ul>
+        </nav>
+
+        <!--회원가입 모달창-->
+        <!-- <div class="modal" id="signupModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">회원가입</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <th:block th:replace="~{/aza/login :: setLogin(~{this::login} )}"></th:block>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="submit" class="btn btn-primary">회원가입</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </th:block>
+</html>
