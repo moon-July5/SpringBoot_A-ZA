@@ -7,7 +7,7 @@
         <header class="header">
             <div class="header__wrapper">
                 <h1 class="header__start">
-                    <a th:href="@{/aza/index}"><span class="header__title">A-ZA</span></a>
+                    <a th:href="@{/}"><span class="header__title">A-ZA</span></a>
                 </h1>
                 <div class="header__center">
                     <form class="header__form" onsubmit="return false;">
@@ -33,17 +33,22 @@
         <nav class="nav">
             <ul class="nav__wrapper">
                 <li sec:authorize="isAnonymous()">
-                    <button class="nav__icon" th:onclick="|location.href='@{/user/signup}'|"><img class="nav__img" th:src="@{/imgs/signup-icon.jpg}"></button>
-                    <button class="nav__menu" th:onclick="|location.href='@{/user/signup}'|">회원가입</button>
+                    <button class="nav__icon" th:onclick="|location.href='@{/signup}'|"><img class="nav__img" th:src="@{/imgs/signup-icon.jpg}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/signup}'|">회원가입</button>
                 </li>
                 <li sec:authorize="isAnonymous()">
-                    <button class="nav__icon" th:onclick="|location.href='@{/user/login}'|"><img class="nav__img" th:src="@{/imgs/login-icon.png}"></button>
-                    <button class="nav__menu" th:onclick="|location.href='@{/user/login}'|">로그인</button>
+                    <button class="nav__icon" th:onclick="|location.href='@{/login}'|"><img class="nav__img" th:src="@{/imgs/login-icon.png}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/login}'|">로그인</button>
+                </li>
+                <li>
+                    <button class="nav__icon" th:onclick="|location.href='@{/board}'|"><img class="nav__img" th:src="@{/imgs/board.png}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/board}'|">게시판</button>
                 </li>
                 <li sec:authorize="isAuthenticated()">
-                    <button class="nav__icon" th:onclick="|location.href='@{/user/logout}'|"><img class="nav__img" th:src="@{/imgs/logout-icon.png}"></button>
-                    <button class="nav__menu" th:onclick="|location.href='@{/user/logout}'|">로그아웃</button>
+                    <button class="nav__icon" th:onclick="|location.href='@{/logout}'|"><img class="nav__img" th:src="@{/imgs/logout-icon.png}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/logout}'|">로그아웃</button>
                 </li>
+
             </ul>
         </nav>
 

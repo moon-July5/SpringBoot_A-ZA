@@ -9,22 +9,26 @@
             <div class="login__top">
                 <h1>로그인</h1>
             </div>
-            <form th:action="@{/user/login}" method="post">
+            <div th:if="${param.error}" class="ui-icon-alert alert-danger" role="alert">
+                <p class="text-center">로그인 정보가 정확하지 않습니다.</p>
+            </div>
+            <form th:action="@{/login}" class="needs-validation" method="post">
                 <div class="form-group">
-                    <label style="font-weight:bold; margin-bottom:5px;">아이디</label>
-                    <input type="text" class="form-control" name="id" placeholder="아이디를 입력해주세요">
+                    <label style="font-weight:bold; margin-bottom:5px;">이메일</label>
+                    <input type="text" class="form-control" name="username" placeholder="이메일을 입력해주세요">
                 </div><br>
                 <div class="form-group">
                     <label style="font-weight:bold; margin-bottom:5px;">비밀번호</label>
                     <input type="password" class="form-control" name="password" placeholder="비밀번호를 입력해주세요" required>
-                    <span class="error" th:if="${error}">[[${exception}]]</span>
+                    
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" name="remember-me"> 로그인 유지
+                    <input type="checkbox" class="form-check-input" id="rememberMe"  name="remember-me" checked> 
+                    <label class="form-check-label" for="rememberMe">로그인 유지</label>
                 </div><br>
-                <button type="button" th:onclick="|location.href='@{/aza/index}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}">홈 화면으로</button>
+                <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}">홈 화면으로</button>
                 <button type="submit" class="btn btn-primary loginButton"><img class="button__icon" th:src="@{/imgs/login-icon-white.png}">로그인</button>
-                <button type="button" th:onclick="|location.href='@{/user/signup}'|" class="btn btn-info" style="color: white;"><img class="button__icon" th:src="@{/imgs/signup-icon-white.png}">회원가입</button>
+                <button type="button" th:onclick="|location.href='@{/signup}'|" class="btn btn-info" style="color: white;"><img class="button__icon" th:src="@{/imgs/signup-icon-white.png}">회원가입</button>
             </form>
         </div>
     </th:block>
