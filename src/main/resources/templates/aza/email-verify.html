@@ -1,0 +1,20 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/basic}">
+    
+    <th:block layout:fragment="content">
+        <div class="py-5 text-center" style="margin : 60px 0px 0 200px;" th:if="${error}">
+            <p class="email-verify" style="font-weight: bold;">A-ZA 이메일 확인</p>
+            <div class="alert alert-danger" role="alert">
+                이메일 확인 링크가 정확하지 않습니다.
+            </div>
+        </div>
+        <div class="py-5 text-center" style="margin : 60px 0px 0 200px;" th:if="${error == null}">
+            <p class="email-verify" style="font-weight: bold;">A-ZA 이메일 확인</p>
+            <h3>
+                이메일을 확인했습니다. <span style="font-weight: bold;" th:text="${nickname}"></span>님 회원가입을 축하합니다.
+            </h3><br>
+            <small class="alert alert-info">이제부터 가입할 때 사용한 이메일과 패스워드를 통해 로그인할 수 있습니다.</small>
+        </div>
+    </th:block>
+</html>

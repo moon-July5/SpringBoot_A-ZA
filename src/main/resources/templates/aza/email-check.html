@@ -1,0 +1,27 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{/layout/basic}">
+      <head>
+          <link rel="stylesheet" th:href="@{/css/emailAuth.css}">
+      </head>
+      <th:block layout:fragment="content">
+          <div class="email__Auth">
+            <div class="py-5 text-center" th:if="${error != null}">
+                <p class="email-check" style="font-weight: bold;">A-ZA 회원가입</p>
+                <div  class="alert alert-danger" role="alert" th:text="${error}"></div>
+                <p class="email-check" th:text="${email}"></p>
+            </div>
+        
+            <div class="py-5 text-center" th:if="${error == null}">
+                <p class="email-check" style="font-weight: bold;">A-ZA 회원가입</p>
+        
+                <h2>회원가입을 완료하기 위해 인증 이메일을 확인하세요.</h2>
+        
+                <div>
+                    <p class="email-check" th:text="${email}"></p>
+                    <a class="btn btn-outline-info" th:href="@{/member/email-resend}">인증 이메일 다시 보내기</a>
+                </div>
+          </div>
+      </th:block>
+</html>

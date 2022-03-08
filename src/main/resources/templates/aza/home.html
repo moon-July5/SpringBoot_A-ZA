@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout/basic}">
+        <th:block layout:fragment="content">
+            <div class="home">
+                <div class="alert alert-warning" role="alert" style="margin : 60px 0px 0 200px;" th:if="${member != null && !member.isValid()}">
+                        회원 가입을 완료하려면 <a th:href="@{/member/email-check}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+                </div>
+                <div class="py-5 text-center" style="margin : 60px 40px 0 200px;">
+                    <h2>A-ZA Home!!</h2>
+                </div>
+            
+            </div>
+        </th:block>
+</html>
