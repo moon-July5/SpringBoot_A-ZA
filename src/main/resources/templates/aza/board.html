@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{/layout/basic}">
     <head>
@@ -10,7 +11,8 @@
       <section class="content">
         <div class="content__top">
           <h1>게시판</h1>
-          <button class="content__button">글쓰기</button>
+          <button sec:authorize="isAuthenticated()" class="content__button"
+          th:onclick="|location.href='@{/board/register}'|">글쓰기</button>
         </div>
         <div class="content__center">
           <table class="table table-hover table-striped">

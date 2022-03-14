@@ -1,8 +1,8 @@
 <!--header 부분을 나타냄-->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <th:block th:fragment="headerFrag"
-    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:fragment="headerFrag">
         <!--Header -->
         <header class="header">
             <div class="header__wrapper">
@@ -52,25 +52,5 @@
             </ul>
         </nav>
 
-        <!--회원가입 모달창-->
-        <!-- <div class="modal" id="signupModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">회원가입</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">X</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <th:block th:replace="~{/aza/login :: setLogin(~{this::login} )}"></th:block>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <button type="submit" class="btn btn-primary">회원가입</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </th:block>
 </html>

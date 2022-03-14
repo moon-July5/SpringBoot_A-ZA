@@ -1,6 +1,7 @@
 package com.moon.aza.entity;
 
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ public class Member extends BaseEntity {
 
     private LocalDateTime emailTokenGeneratedAt;
 
+    // 이메일 인증 완료 후
     public void verified(){
         this.isValid = true;
         joinedAt = LocalDateTime.now();

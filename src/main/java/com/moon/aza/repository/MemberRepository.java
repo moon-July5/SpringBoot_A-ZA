@@ -1,7 +1,6 @@
 package com.moon.aza.repository;
 
 import com.moon.aza.entity.Member;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
