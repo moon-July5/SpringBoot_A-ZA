@@ -1,10 +1,11 @@
 package com.moon.aza.entity;
 
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @ToString
@@ -34,6 +35,9 @@ public class Member extends BaseEntity {
     private LocalDateTime joinedAt;
 
     private LocalDateTime emailTokenGeneratedAt;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+    private List<Board> boards = new ArrayList<>();
 
     // 이메일 인증 완료 후
     public void verified(){
