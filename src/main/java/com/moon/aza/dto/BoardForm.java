@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +20,8 @@ public class BoardForm {
     private String writer;
 
     private String contents;
+
+    private LocalDateTime regDate, modDate;
+
 
 }

@@ -14,7 +14,7 @@ class BoardServiceTest {
     public BoardService boardService;
 
     @Test
-    public void pageTest(){
+    public void pageTest1(){
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
 
         PageResultDTO<BoardForm, Board> resultDTO = boardService.getList(pageRequestDTO);
@@ -22,5 +22,25 @@ class BoardServiceTest {
         for(BoardForm boardForm : resultDTO.getDtoList()){
             System.out.println(boardForm);
         }
+    }
+
+    @Test
+    public void pageTest2() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+
+        PageResultDTO<BoardForm, Board> resultDTO = boardService.getList(pageRequestDTO);
+
+        System.out.println("PREV: "+resultDTO.isPrev());
+        System.out.println("NEXT: "+resultDTO.isNext());
+        System.out.println("TOTAL: "+resultDTO.getTotalPage());
+        System.out.println("==================================");
+
+        for(BoardForm boardForm : resultDTO.getDtoList()){
+            System.out.println(boardForm);
+        }
+        System.out.println("==================================");
+        // 화면에 출력될 페이지 번호
+        resultDTO.getPageList().forEach(i -> System.out.println(i));
+
     }
 }

@@ -1,7 +1,9 @@
 package com.moon.aza.controller;
 
+import com.moon.aza.dto.PageRequestDTO;
 import com.moon.aza.dto.SignUpForm;
 import com.moon.aza.entity.Member;
+import com.moon.aza.service.BoardService;
 import com.moon.aza.support.CurrentMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 @Controller
 public class MainController {
+    private final BoardService boardService;
 
     /* 홈(메인) 페이지 */
     @GetMapping("/")
@@ -37,9 +40,10 @@ public class MainController {
         return "/aza/login";
     }
     /* 게시판 페이지 */
-    @GetMapping("/board")
-    public String board() {
-        log.info("/aza/board");
+    @GetMapping("/board") // 화면에서 page 와 size를 전달받기 위해
+    public String board(PageRequestDTO pageRequestDTO, Model model) {
+        log.info("/board");
+        model.addAttribute("result", boardService.getList(pageRequestDTO));
         return "/aza/board";
     }
 

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
@@ -42,6 +43,12 @@ public class BoardService {
         entityMap.put("board", board);
         return entityMap;
     }
+    // 게시글 조회
+    public BoardForm read(Long id){
+        Optional<Board> result = boardRepository.findById(id);
+
+        return result.isPresent()? entityToDto(result.get()):null;
+    }
     // 페이징 처리
     public PageResultDTO<BoardForm, Board> getList(PageRequestDTO requestDTO){
         Pageable pageable = requestDTO.getPageable(Sort.by("id"));
@@ -59,6 +66,8 @@ public class BoardService {
                 .title(board.getTitle())
                 .contents(board.getContents())
                 .writer(board.getWriter())
+                .regDate(board.getRegDate())
+                .modDate(board.getRegDate())
                 .build();
         return dto;
     }

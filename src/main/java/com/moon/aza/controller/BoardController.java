@@ -1,6 +1,7 @@
 package com.moon.aza.controller;
 
 import com.moon.aza.dto.BoardForm;
+import com.moon.aza.dto.PageRequestDTO;
 import com.moon.aza.entity.Board;
 import com.moon.aza.entity.Member;
 import com.moon.aza.service.BoardService;
@@ -26,6 +27,14 @@ public class BoardController {
         model.addAttribute("member",member);
         model.addAttribute(new BoardForm());
         return "/aza/board-register";
+    }
+    @GetMapping("/board/read")
+    public String boardRead(long id, PageRequestDTO pageRequestDTO, Model model){
+        log.info("/board/read");
+        BoardForm boardForm = boardService.read(id);
+        model.addAttribute("boardForm", boardForm);
+
+        return "/aza/board-read";
     }
 
     @PostMapping("/board/register")
