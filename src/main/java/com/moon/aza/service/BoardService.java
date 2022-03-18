@@ -29,6 +29,7 @@ public class BoardService {
         Map<String, Object> entityMap = saveBoard(boardForm);
         Board board = (Board) entityMap.get("board");
 
+
         return boardRepository.save(board);
     }
     // 게시글 저장
@@ -51,7 +52,7 @@ public class BoardService {
     }
     // 페이징 처리
     public PageResultDTO<BoardForm, Board> getList(PageRequestDTO requestDTO){
-        Pageable pageable = requestDTO.getPageable(Sort.by("id"));
+        Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
 
         Page<Board> result = boardRepository.findAll(pageable);
 

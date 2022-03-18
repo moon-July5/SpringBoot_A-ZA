@@ -24,7 +24,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr th:each="dto : ${result.dtoList}">
+              <tr th:each="dto : ${result?.dtoList}">
                 <th scope="row"><a th:href="@{/board/read(id=${dto.id}, page=${result.page})}">[[${dto.title}]]</a></th>
                 <td>[[${dto.writer}]]</td>
                 <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
@@ -35,15 +35,15 @@
         <!--페이지-->
         <div class="content__end">
           <ul class="pagination h-100 justify-content-center align-items-center">
-              <li class="page-item" th:if="${result.prev}">
+              <li class="page-item" th:if="${result?.prev}">
                 <a class="page-link" th:href="@{/board(page= ${result.start-1})}" tabindex="-1">Prev</a>
               </li>
-              <li th:class=" 'page-item '+ ${result.page == page? 'active' : ''} " th:each="page : ${result.pageList}">
+              <li th:class=" 'page-item '+ ${result?.page == page? 'active' : ''} " th:each="page : ${result?.pageList}">
                 <a class="page-link" th:href="@{/board(page= ${page})}">
                   [[${page}]]
                 </a>
               </li>
-              <li class="page-item" th:if="${result.next}">
+              <li class="page-item" th:if="${result?.next}">
                 <a class="page-link" th:href="@{/board(page= ${result.end+1})}" tabindex="-1">Next</a>
               </li>
           </ul>

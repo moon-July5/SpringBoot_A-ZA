@@ -39,6 +39,7 @@ public class MainController {
         log.info("/login");
         return "/aza/login";
     }
+
     /* 게시판 페이지 */
     @GetMapping("/board") // 화면에서 page 와 size를 전달받기 위해
     public String board(PageRequestDTO pageRequestDTO, Model model) {
