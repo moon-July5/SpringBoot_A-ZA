@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout/basic}">
+    <head>
+        <link rel="stylesheet" th:href="@{/css/register.css}">
+        <script th:src="@{/js/ckeditor/ckeditor.js}"></script>
+    </head>
+    <th:block layout:fragment="content">
+        <div class="board__register">
+            <div class="register__top">
+                <h1>게시글 작성</h1>
+            </div>
+            <form th:action="@{/board/register}" method="post" th:object="${boardForm}">
+                <input type="hidden" id="id" name="id" th:value="${member?.id}"/>
+                <div class="form-group" style="font-weight:bold; margin-bottom:15px;">
+                    <label>제목</label>
+                    <input type="text" class="form-control" name="title" th:field="*{title}" required>
+                </div>
+                <div class="form-group" style="font-weight:bold; margin-bottom:15px;">
+                    <label>작성자</label>
+                    <input type="text" class="form-control" name="writer"  th:value="${member?.nickname}" readonly>
+                </div>
+                <div class="form-group" style="font-weight:bold; margin-bottom:15px;">
+                    <label>내용</label>
+                    <textarea class="form-control" row="5" name="contents" id="contents" th:field="*{contents}" required></textarea>
+                </div><br>
+                <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}"> 홈 화면으로</button>
+                <button type="submit" class="btn btn-primary"><img class="button__icon" th:src="@{/imgs/register-white.png}">등록하기</button>
+            </form>
+        </div> 
+        <script type="text/javascript" th:inline="javascript">
+            $(function() { 
+                CKEDITOR.replace('contents',{ 
+                    filebrowserUploadUrl: '/fileUpload', 
+                    font_names : "맑은 고딕/Malgun Gothic;굴림/Gulim;돋움/Dotum;바탕/Batang;궁서/Gungsuh;Arial/Arial;Comic Sans MS/Comic Sans MS;Courier New/Courier New;Georgia/Georgia;Lucida Sans Unicode/Lucida Sans Unicode;Tahoma/Tahoma;Times New Roman/Times New Roman;MS Mincho/MS Mincho;Trebuchet MS/Trebuchet MS;Verdana/Verdana", 
+                    font_defaultLabel : "맑은 고딕/Malgun Gothic",
+                    fontSize_defaultLabel : "12", 
+                    language : "ko" 
+                });
+            });
+        </script>  
+    </th:block>
+    
+</html>

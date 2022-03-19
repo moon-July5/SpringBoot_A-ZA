@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout/basic}">
+    <head>
+        <link rel="stylesheet" th:href="@{/css/read.css}">
+    </head>
+    <th:block layout:fragment="content">
+        <div class="board__read">
+           <div class="read__top">
+               <div class="title">[[${boardForm.title}]]</div>
+           </div>
+           <hr>
+           <div class="read__info">
+                <div class="writer">[[${boardForm.writer}]]</div>
+                <div class="date">[[${#temporals.format(boardForm.regDate, 'yyyy/MM/dd HH:mm')}]]</div>
+           </div>
+           <hr>
+           <div class="read__contents" style="margin-bottom: 5%;">
+               <div th:utext="${boardForm.contents}"></div>
+           </div>
+           <div class="read__button">
+               <button class="btn btn-secondary modifyButton" th:onclick="|location.href='@{/board/modify(id=${boardForm.id}, page=${pageRequestDTO.page})}'|">수정</button>
+               <button class="btn btn-danger removeButton" th:onclick="|location.href='@{}'|">삭제</button>
+               <button class="btn btn-info removeButton" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page})}'|">목록</button>
+           </div>
+        </div>
+
+        <script type="text/javascript" th:inline="javascript">
+            $(document).ready(function(){
+                var currentMember = [[${member?.nickname}]];
+                var writer = [[${boardForm.writer}]];
+                function showButton(){
+                    if(currentMember != writer){
+                        $('.modifyButton').hide();
+                        $('.removeButton').hide();
+                    }
+                }
+                showButton();
+            });
+        </script>
+    </th:block>
+</html>

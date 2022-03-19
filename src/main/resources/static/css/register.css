@@ -1,0 +1,16 @@
+.board__register{
+    margin: 60px 40px 0 200px;
+    padding: 20px 0 0 10px;
+}
+.register__top{
+    font-family: 'cookie';
+    font-size : 1.8rem;
+    margin-bottom : 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.button__icon{
+    width:1.2rem;
+    height: 1.3rem;
+    padding-bottom: 3px;
+}
