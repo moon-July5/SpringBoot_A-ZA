@@ -30,4 +30,7 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    public void modifyTitle(String title){this.title = title;}
+    public void modifyContents(String contents){this.contents = contents;}
+
 }

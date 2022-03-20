@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Log4j2
@@ -42,9 +39,25 @@ public class BoardController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute BoardForm boardForm, RedirectAttributes redirectAttributes){
+    public String register(@ModelAttribute BoardForm boardForm){
         Board board = boardService.register(boardForm);
 
+        return "redirect:/board";
+    }
+
+    @PutMapping("/modify/{id}")
+    public String modify(@ModelAttribute BoardForm boardForm, PageRequestDTO pageRequestDTO,
+                         RedirectAttributes redirectAttributes){
+        boardService.modify(boardForm);
+
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("id", boardForm.getId());
+
+        return "redirect:/board/read";
+    }
+    @DeleteMapping("/remove/{id}")
+    public String remove(@PathVariable Long id){
+        boardService.remove(id);
         return "redirect:/board";
     }
 

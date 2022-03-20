@@ -12,15 +12,16 @@
             <div class="modify__top">
                 <h1>게시글 수정</h1>
             </div>
-            <form th:action="@{/board/register}" method="post" th:object="${boardForm}">
-                <input type="hidden" id="id" name="id" th:value="${member?.id}"/>
+            <form th:action="@{'/board/modify/' +${boardForm.id}}" method="Post">
+                <input type="hidden" name="_method" value="put"/>
+                <input type="hidden" id="id" name="id" th:value="${boardForm.id}"/>
                 <div class="form-group" style="font-weight:bold; margin-bottom:15px;">
                     <label>제목</label>
                     <input type="text" class="form-control" name="title" th:value="${boardForm.title}" required>
                 </div>
                 <div class="form-group" style="font-weight:bold; margin-bottom:15px;">
                     <label>작성자</label>
-                    <input type="text" class="form-control" name="writer"  th:value="${member?.nickname}" readonly>
+                    <input type="text" class="form-control" name="writer"  th:value="${member.nickname}" readonly>
                 </div>
                 <div class="form-group" style="font-weight:bold; margin-bottom:15px;">
                     <label>내용</label>
@@ -39,6 +40,12 @@
                     fontSize_defaultLabel : "12", 
                     language : "ko"
                 });
+                $('.btn-primary').click(function(){
+                    if(!confirm("수정하시겠습니까?")){
+                        return;
+                    }
+                });
+                
             });
         </script>  
     </th:block>

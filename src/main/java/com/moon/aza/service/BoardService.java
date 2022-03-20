@@ -29,7 +29,6 @@ public class BoardService {
         Map<String, Object> entityMap = saveBoard(boardForm);
         Board board = (Board) entityMap.get("board");
 
-
         return boardRepository.save(board);
     }
     // 게시글 저장
@@ -49,6 +48,24 @@ public class BoardService {
         Optional<Board> result = boardRepository.findById(id);
 
         return result.isPresent()? entityToDto(result.get()):null;
+    }
+    // 게시글 수정
+    @Transactional
+    public void modify(BoardForm boardForm){
+        Optional<Board> board = boardRepository.findById(boardForm.getId());
+
+        if(board.isPresent()){
+            Board modifyBoard = board.get();
+
+            modifyBoard.modifyTitle(boardForm.getTitle());
+            modifyBoard.modifyContents(boardForm.getContents());
+
+            boardRepository.save(modifyBoard);
+        }
+    }
+    @Transactional
+    public void remove(Long id){
+        boardRepository.deleteById(id);
     }
     // 페이징 처리
     public PageResultDTO<BoardForm, Board> getList(PageRequestDTO requestDTO){
