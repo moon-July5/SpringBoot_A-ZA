@@ -8,6 +8,8 @@
     </head>
     <th:block layout:fragment="content">
         <div class="board__read">
+        <form th:action="'/board/remove/' +${boardForm.id}" method="Post">
+            <input type="hidden" name="_method" value="delete"/>
            <div class="read__top">
                <div class="title">[[${boardForm.title}]]</div>
            </div>
@@ -21,16 +23,18 @@
                <div th:utext="${boardForm.contents}"></div>
            </div>
            <div class="read__button">
-               <button class="btn btn-secondary modifyButton" th:onclick="|location.href='@{/board/modify(id=${boardForm.id}, page=${pageRequestDTO.page})}'|">수정</button>
-               <button class="btn btn-danger removeButton" th:onclick="|location.href='@{}'|">삭제</button>
-               <button class="btn btn-info removeButton" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page})}'|">목록</button>
+               <button type="button" class="btn btn-secondary modifyButton" th:onclick="|location.href='@{/board/modify(id=${boardForm.id}, page=${pageRequestDTO.page})}'|">수정</button>
+               <button type="submit" class="btn btn-danger removeButton">삭제</button>
+               <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page})}'|">목록</button>
            </div>
+        </form>
         </div>
-
+        
         <script type="text/javascript" th:inline="javascript">
             $(document).ready(function(){
                 var currentMember = [[${member?.nickname}]];
                 var writer = [[${boardForm.writer}]];
+
                 function showButton(){
                     if(currentMember != writer){
                         $('.modifyButton').hide();
@@ -39,7 +43,7 @@
                 }
                 $('.removeButton').click(function(){
                     if(!confirm("정말 삭제하시겠습니까?")){
-                        return;
+                        self.location.reload();
                     }
                 });
                 showButton();
