@@ -27,17 +27,32 @@
                 </div><br>
                 <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}"> 홈 화면으로</button>
                 <button type="submit" class="btn btn-primary"><img class="button__icon" th:src="@{/imgs/register-white.png}">등록하기</button>
+                <button type="button" class="test">테스트</button>
             </form>
         </div> 
         <script type="text/javascript" th:inline="javascript">
-            $(function() { 
+            $(document).ready(function(){
                 CKEDITOR.replace('contents',{ 
-                    filebrowserUploadUrl: '/fileUpload', 
-                    font_names : "맑은 고딕/Malgun Gothic;굴림/Gulim;돋움/Dotum;바탕/Batang;궁서/Gungsuh;Arial/Arial;Comic Sans MS/Comic Sans MS;Courier New/Courier New;Georgia/Georgia;Lucida Sans Unicode/Lucida Sans Unicode;Tahoma/Tahoma;Times New Roman/Times New Roman;MS Mincho/MS Mincho;Trebuchet MS/Trebuchet MS;Verdana/Verdana", 
-                    font_defaultLabel : "맑은 고딕/Malgun Gothic",
-                    fontSize_defaultLabel : "12", 
-                    language : "ko" 
+                    filebrowserUploadMethod :'form',
+                    filebrowserUploadUrl: '/image/upload'
+           
                 });
+                CKEDITOR.on('dialogDefinition',function(e){
+                    var dialogName = e.data.name;
+                    var dialogDefinition = e.data.definition;
+
+                    switch(dialogName){
+                        case 'image':
+                            //dialogDefinition.removeContents('info');
+                            dialogDefinition.removeContents('Link');
+                            dialogDefinition.removeContents('advanced');
+                            break;
+                    }
+                });
+                $('.test').click(function(){
+                    alert(CKEDITOR.instances.editor.getData());
+                });
+
             });
         </script>  
     </th:block>

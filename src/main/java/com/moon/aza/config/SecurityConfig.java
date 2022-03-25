@@ -45,6 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe()
                 .userDetailsService(memberService)
                 .tokenRepository(tokenRepository());
+        // X-Frame-Options Click jacking 공격 막기 설정
+        http.headers()
+                .frameOptions().sameOrigin();
+        // 'ckeditor4' 이미지 업로드 시 403 Forbidden Error로 인해 설정
+        http.cors().and()
+                .csrf().disable();
     }
     @Bean
     public PersistentTokenRepository tokenRepository(){
