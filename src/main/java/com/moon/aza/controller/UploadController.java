@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Log4j2
 @RestController
-public class uploadController {
+public class UploadController {
     @Value("${image.upload.path}")
     private String uploadPath;
 
@@ -37,9 +37,6 @@ public class uploadController {
             String originalName = upload.getOriginalFilename();
             String fileName = originalName.substring(originalName.lastIndexOf("\\")+1);
             log.info("fileName : "+fileName);
-
-            // 날짜 폴더 생성
-            //String folderPath = makeFolder();
 
             // UUID
             String uuid = UUID.randomUUID().toString();
@@ -79,20 +76,5 @@ public class uploadController {
         }
 
     }
-    // 폴더 만들기
-    private String makeFolder() {
-        // 연 / 월 / 일
-        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        String folderPath = str.replace("//", File.separator);
 
-        // uploadPath 경로에 folderPath 폴더 생성
-        File uploadPathFolder = new File(uploadPath, folderPath);
-
-        // 폴더가 존재하지 않는다면 생성
-        if(uploadPathFolder.exists() == false){
-            uploadPathFolder.mkdirs();
-        }
-
-        return folderPath;
-    }
 }

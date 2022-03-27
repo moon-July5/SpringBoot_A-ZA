@@ -27,7 +27,6 @@
                 </div><br>
                 <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}"> 홈 화면으로</button>
                 <button type="submit" class="btn btn-primary"><img class="button__icon" th:src="@{/imgs/register-white.png}">등록하기</button>
-                <button type="button" class="test">테스트</button>
             </form>
         </div> 
         <script type="text/javascript" th:inline="javascript">
@@ -48,9 +47,6 @@
                             dialogDefinition.removeContents('advanced');
                             break;
                     }
-                });
-                $('.test').click(function(){
-                    alert(CKEDITOR.instances.editor.getData());
                 });
 
             });

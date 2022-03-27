@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
 /* 화면에서 전달되는 page 와 size 파라미터들을 수집하는 역할*/
 @Builder
 @AllArgsConstructor

@@ -23,5 +23,4 @@ public class BoardForm {
 
     private LocalDateTime regDate, modDate;
 
-
 }
