@@ -8,26 +8,34 @@
     </head>
     <th:block layout:fragment="content">
         <div class="board__read">
-        <form th:action="'/board/remove/' +${boardForm.id}" method="Post">
-            <input type="hidden" name="_method" value="delete"/>
-           <div class="read__top">
-               <div class="title">[[${boardForm.title}]]</div>
-           </div>
-           <hr>
-           <div class="read__info">
-                <div class="writer">[[${boardForm.writer}]]</div>
-                <div class="date">[[${#temporals.format(boardForm.regDate, 'yyyy/MM/dd HH:mm')}]]</div>
-           </div>
-           <hr>
-           <div class="read__contents" style="margin-bottom: 5%;">
-               <div th:utext="${boardForm.contents}"></div>
-           </div>
-           <div class="read__button">
-               <button type="button" class="btn btn-secondary modifyButton" th:onclick="|location.href='@{/board/modify(id=${boardForm.id}, page=${pageRequestDTO.page})}'|">수정</button>
-               <button type="submit" class="btn btn-danger removeButton">삭제</button>
-               <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page})}'|">목록</button>
-           </div>
-        </form>
+            <form th:action="'/board/remove/' +${boardForm.id}" method="Post">
+                <input type="hidden" name="_method" value="delete"/>
+                <div class="read__top">
+                    <div class="title">[[${boardForm.title}]]</div>
+                </div>
+                <hr>
+                <div class="read__info">
+                        <div class="writer">[[${boardForm.writer}]]</div>
+                        <div class="date">[[${#temporals.format(boardForm.regDate, 'yyyy/MM/dd HH:mm')}]]</div>
+                </div>
+                <hr>
+                <div class="read__contents" style="margin-bottom: 5%;">
+                    <div th:utext="${boardForm.contents}"></div>
+                </div>
+                <div class="read__button">
+                    <button type="button" class="btn btn-secondary modifyButton" th:onclick="|location.href='@{/board/modify(id=${boardForm.id}, page=${pageRequestDTO.page})}'|">수정</button>
+                    <button type="submit" class="btn btn-danger removeButton">삭제</button>
+                    <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page})}'|">목록</button>
+                </div>
+            </form>
+            <div class="reviewList"></div>
+            <div class="review">
+                <h4>댓글</h4>
+                <div class="review__input">
+                    <textarea class="form-control text"  name="text" placeholder="로그인을 하셔야 댓글을 작성하실 수 있습니다."></textarea>
+                    <button type="button" class="btn btn-dark reviewSave">등록</button>
+                </div>
+            </div>
         </div>
         
         <script type="text/javascript" th:inline="javascript">
@@ -41,11 +49,22 @@
                         $('.removeButton').hide();
                     }
                 }
+
                 $('.removeButton').click(function(){
                     if(!confirm("정말 삭제하시겠습니까?")){
                         self.location.reload();
                     }
                 });
+
+                // 로그인 시 댓글 작성 
+                $('.text').click(function(e){
+                    if(currentMember==null){
+                        if(confirm("로그인 하시겠습니까?")){
+                            location.href="/login";
+                        }
+                    }
+                });
+
                 showButton();
             });
         </script>

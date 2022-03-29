@@ -16,3 +16,27 @@
     margin-bottom: 15px;
     justify-content: space-between;
 }
+.review h4{
+    margin-top: 2%;
+    margin-bottom: 4%;
+    font-weight: bold;
+
+}
+.review .review__input{
+    display: flex;
+    max-width: 100%;
+    margin-bottom: 5%;
+}
+.review .text{
+    width: calc(100% - 60px);
+    height: 60px;
+    padding: 0 6px;
+    border-right: none;
+    border-radius: 2px 0 0 2px;
+}
+.board__reivew .reviewSave{
+    width: 60px;
+    height: 60px;
+    border-left: none;
+    border-radius: 0 2px 2px 0;
+}
