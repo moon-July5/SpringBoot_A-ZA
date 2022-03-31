@@ -28,12 +28,15 @@
                     <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page})}'|">목록</button>
                 </div>
             </form>
-            <div class="reviewList"></div>
-            <div class="review">
+            <div class="commentList">
                 <h4>댓글</h4>
-                <div class="review__input">
+                <ul class="list-group"></ul>
+            </div>
+            <div class="comment">
+                
+                <div class="comment__input">
                     <textarea class="form-control text"  name="text" placeholder="로그인을 하셔야 댓글을 작성하실 수 있습니다."></textarea>
-                    <button type="button" class="btn btn-dark reviewSave">등록</button>
+                    <button type="button" class="btn btn-dark commentSave">등록</button>
                 </div>
             </div>
         </div>
@@ -42,6 +45,9 @@
             $(document).ready(function(){
                 var currentMember = [[${member?.nickname}]];
                 var writer = [[${boardForm.writer}]];
+                var memberId = [[${member?.id}]];
+                var boardId =[[${boardForm.id}]];
+                var text = $('textarea[name="text"]');
 
                 function showButton(){
                     if(currentMember != writer){
@@ -64,8 +70,55 @@
                         }
                     }
                 });
+                $('.commentSave').click(function(e){
+                    var data = {boardId : boardId, text : text.val(), memberId : memberId };
+                    console.log(data);
+                    
+                    if(data.text==""){
+                        alert("댓글을 작성해주세요!");
+                        return;
+                    }
 
+                    $.ajax({
+                        url : '/comments/'+boardId,
+                        type : 'POST',
+                        contentType : 'application/json; charset=utf-8',
+                        dataType : 'json',
+                        data : JSON.stringify(data),
+                    success : function(result){
+                        console.log("success: "+result);
+                        self.location.reload();
+                    },
+                    error : function(error){
+                        console.log("error : "+error);
+                    }
+                    });
+                });
+                // 게시판 댓글 목록
+                function getBoardComments() {
+            
+                    $.getJSON("/comments/"+boardId+"/all", function(arr){
+                        var str="";
+                        $.each(arr, function(idx, comment){
+                            str += '  <li id="comment__'+ comment.commentNum +' class="list-group-item d-flex justify-content-between">';
+                            str += '    <div class="commentWriter">'+comment.nickname+'</div>';
+                            str += '    <div class="d-flex">';
+                            str += '    <div class="text-monospace mr-1">'+comment.text+'</div>';
+                            // if(writerUid == review.uid){
+                            // str += '    <div class="recipeWriter">작성자</div></div>'
+                            // }
+                            if(currentMember == writer){
+                            str += '    <button class="badge btn-warning">수정</button><span> | </span>';
+                            str += '    <button class="badge btn-danger">삭제</button>'
+                            }
+                            str += '    </div>';
+                            str += '  </li>';
+                        }); 
+                        $(".commentList ul.list-group").html(str);
+                    });
+                }
                 showButton();
+                getBoardComments();
             });
         </script>
     </th:block>

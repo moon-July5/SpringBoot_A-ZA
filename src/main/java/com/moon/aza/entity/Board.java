@@ -1,9 +1,12 @@
 package com.moon.aza.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Builder
@@ -29,6 +32,10 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+
+    @OneToMany(mappedBy = "board" ,fetch = FetchType.LAZY)
+    private List<Comment> comments;
 
     public void modifyTitle(String title){this.title = title;}
     public void modifyContents(String contents){this.contents = contents;}
