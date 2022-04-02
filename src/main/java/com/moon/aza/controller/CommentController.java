@@ -1,7 +1,6 @@
 package com.moon.aza.controller;
 
 import com.moon.aza.dto.CommentDTO;
-import com.moon.aza.entity.Comment;
 import com.moon.aza.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +31,22 @@ public class CommentController {
     public ResponseEntity<Long> addComment(@RequestBody CommentDTO commentDTO){
         log.info("CommentDTO : "+commentDTO);
         Long commentNum = commentService.save(commentDTO);
+        return new ResponseEntity<>(commentNum, HttpStatus.OK);
+    }
+
+    // 댓글 수정
+    @PutMapping("/{boardId}/{commentNum}")
+    public ResponseEntity<Long> modifyComment(@PathVariable("commentNum") Long commentNum, @RequestBody CommentDTO commentDTO){
+        log.info("CommentDTO : "+commentDTO);
+        commentService.modify(commentDTO);
+        return new ResponseEntity<>(commentNum, HttpStatus.OK);
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/{boardId}/{commentNum}")
+    public ResponseEntity<Long> removeReview(@PathVariable("commentNum") Long commentNum){
+        log.info("commentNum : "+commentNum);
+        commentService.remove(commentNum);
         return new ResponseEntity<>(commentNum, HttpStatus.OK);
     }
 

@@ -33,7 +33,6 @@
                 <ul class="list-group"></ul>
             </div>
             <div class="comment">
-                
                 <div class="comment__input">
                     <textarea class="form-control text"  name="text" placeholder="로그인을 하셔야 댓글을 작성하실 수 있습니다."></textarea>
                     <button type="button" class="btn btn-dark commentSave">등록</button>
@@ -48,14 +47,14 @@
                 var memberId = [[${member?.id}]];
                 var boardId =[[${boardForm.id}]];
                 var text = $('textarea[name="text"]');
-
+                // 버튼 숨기기
                 function showButton(){
                     if(currentMember != writer){
                         $('.modifyButton').hide();
                         $('.removeButton').hide();
                     }
                 }
-
+           
                 $('.removeButton').click(function(){
                     if(!confirm("정말 삭제하시겠습니까?")){
                         self.location.reload();
@@ -70,6 +69,7 @@
                         }
                     }
                 });
+                // 댓글 저장
                 $('.commentSave').click(function(e){
                     var data = {boardId : boardId, text : text.val(), memberId : memberId };
                     console.log(data);
@@ -94,32 +94,106 @@
                     }
                     });
                 });
-                // 게시판 댓글 목록
-                function getBoardComments() {
-            
+                 
+                showButton();
+           
+            });
+            // 날짜 포맷 변경
+            function formatDate(regDate){
+                var date = new Date(regDate);
+                return date.getFullYear() + '.'+ ('0'+(date.getMonth()+1)).slice(-2) + '.' + ('0'+date.getDate()).slice(-2) + '.  ' 
+                + ('0'+date.getHours()).slice(-2) + ':'+('0'+date.getMinutes()).slice(-2)+' ';
+
+            }
+           // 게시판 댓글 목록
+           function getBoardComments() {
+                var boardId =[[${boardForm.id}]];
+                var currentMember = [[${member?.nickname}]];
+                var writer = [[${boardForm.writer}]];
                     $.getJSON("/comments/"+boardId+"/all", function(arr){
                         var str="";
                         $.each(arr, function(idx, comment){
-                            str += '  <li id="comment__'+ comment.commentNum +' class="list-group-item d-flex justify-content-between">';
-                            str += '    <div class="commentWriter">'+comment.nickname+'</div>';
+                            str += '  <li id="comment__'+ comment.commentNum+'">';
+                            str += '    <div class="commentWriter d-flex">'+comment.nickname;
+                            if(writer == comment.nickname){
+                                str += '    <div class="sign">작성자</div>';
+                            }
+                            str += '        <div class="date">'+formatDate(comment.regDate)+'</div></div>';
                             str += '    <div class="d-flex">';
-                            str += '    <div class="text-monospace mr-1">'+comment.text+'</div>';
-                            // if(writerUid == review.uid){
-                            // str += '    <div class="recipeWriter">작성자</div></div>'
-                            // }
+                            str += '    <div class="text-monospace mr-1 flex-fill">'+comment.text+'</div>';
                             if(currentMember == writer){
-                            str += '    <button class="badge btn-warning">수정</button><span> | </span>';
-                            str += '    <button class="badge btn-danger">삭제</button>'
+                            str += '    <button id="modify" class="badge btn-warning" onclick="modifyForm('+comment.commentNum+',\''+comment.text+'\')">수정</button>';
+                            str += '    <button class="badge btn-danger" onclick=commentRemove('+comment.commentNum+')>삭제</button>';
                             }
                             str += '    </div>';
                             str += '  </li>';
-                        }); 
+                        });
                         $(".commentList ul.list-group").html(str);
                     });
+            }
+        
+            // 댓글 수정 폼 생성 함수
+            function modifyForm(commentNum, text) {
+                var str = "";
+                str += '  <li id="comment__' + commentNum + '">';
+                str += '    <div class="d-flex">';
+                str += '    <textarea class="form-control flex-fill modifyText" name="modifyText" id="' +
+                        'modifyText">' + text + '</textarea>';
+                str += '    <button class="badge btn-warning" onclick=commentModify('+commentNum+')>수정</button>';
+                str += '    <button class="badge btn-danger" onclick=getBoardComments()>취소</button>';
+                str += '    </div>';
+
+                str += '  </li>';
+
+                $('#comment__' + commentNum).replaceWith(str);
+                $('#comment__' + commentNum + ' #modifyText').focus();
+            
+            }
+            // 댓글 수정 함수
+            function commentModify(commentNum){
+                var memberId = [[${member?.id}]];
+                var boardId =[[${boardForm.id}]];
+                var text = $('#modifyText').val();
+                var data = {commentNum : commentNum, boardId : boardId, text : text, memberId : memberId};
+                
+                $.ajax({
+                    url : '/comments/'+boardId+"/"+commentNum,
+                    type : 'PUT',
+                    contentType : 'application/json; charset=utf-8',
+                    dataType : 'JSON',
+                    data : JSON.stringify(data),
+                success : function(result){
+                    console.log("success : "+result);
+                    self.location.reload();
+                },
+                error : function(err){
+                    console.log(err);
                 }
-                showButton();
-                getBoardComments();
-            });
+                });
+
+            }
+            // 댓글 삭제 함수
+            function commentRemove(commentNum) {
+                var data = {commentNum: commentNum};
+                var boardId = [[${boardForm.id}]];
+                if (confirm("댓글을 삭제하시겠습니까?")) {
+                    $.ajax({
+                        url: '/comments/' + boardId + "/" + commentNum,
+                        type: 'DELETE',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        success: function (result) {
+                            console.log("success : " + result);
+                            self.location.reload();
+                        },
+                        error: function (error) {
+                            console.log("error : " + error);
+                        }
+                    });
+                }
+            }
+            getBoardComments();
         </script>
     </th:block>
 </html>

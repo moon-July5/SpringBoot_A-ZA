@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,6 +28,21 @@ public class CommentService {
         Comment comment = dtoToEntity(commentDTO);
         commentRepository.save(comment);
         return comment.getCommentNum();
+    }
+    // 댓글 수정
+    public void modify(CommentDTO commentDTO){
+        Optional<Comment> result = commentRepository.findById(commentDTO.getCommentNum());
+
+        if(result.isPresent()){
+            Comment comment = result.get();
+            comment.changeText(commentDTO.getText());
+
+            commentRepository.save(comment);
+        }
+    }
+    // 댓글 삭제
+    public void remove(Long commentNum){
+        commentRepository.deleteById(commentNum);
     }
 
     // DTO -> Entity

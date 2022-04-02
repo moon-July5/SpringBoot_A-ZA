@@ -25,9 +25,25 @@
 .commentList .list-group{
     margin-bottom: 2%;
 }
+.commentList .list-group li{
+    margin-bottom: 2%;
+}
 .commentList .list-group .commentWriter{
     font-weight: bold;
     font-size: 1.2rem;
+}
+.commentList .list-group .commentWriter .sign{
+    margin-left: 10px;
+    text-align: center;
+    padding-top: 10px;
+    font-size: 0.5rem;
+    color: red;
+}
+.commentList .list-group .commentWriter .date{
+    margin-left: 20px;
+    font-size : 0.5rem;
+    padding-top: 10px;
+    color : #696969;
 }
 .comment .comment__input{
     display: flex;

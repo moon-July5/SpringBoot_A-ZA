@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -46,9 +47,12 @@ public class BoardService {
     }
     // 게시글 조회
     public BoardForm read(Long id){
-        Optional<Board> result = boardRepository.findById(id);
+        //Optional<Board> result = boardRepository.findById(id);
+        List<Object[]> result = boardRepository.getBoardWithAll(id);
+        Board board = (Board) result.get(0)[0];
+        Long commentCnt = (Long) result.get(0)[1];
 
-        return result.isPresent()? entityToDto(result.get()):null;
+        return entityToDto(board, commentCnt);
     }
     // 게시글 수정
     @Transactional
@@ -68,18 +72,22 @@ public class BoardService {
     public void remove(Long id){
         boardRepository.deleteById(id);
     }
+
     // 페이징 처리
-    public PageResultDTO<BoardForm, Board> getList(PageRequestDTO requestDTO){
+    public PageResultDTO<BoardForm, Object[]> getList(PageRequestDTO requestDTO){
         Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
 
-        Page<Board> result = boardRepository.findAll(pageable);
-
-        Function<Board, BoardForm> fn = (entity -> entityToDto(entity));
+        //Page<Board> result = boardRepository.findAll(pageable);
+        Page<Object[]> result = boardRepository.getListPage(pageable);
+        Function<Object[], BoardForm> fn = (arr -> entityToDto(
+                (Board) arr[0],
+                (Long) arr[1]
+        ));
 
         return new PageResultDTO<>(result, fn);
     }
     // entity -> dto
-    public BoardForm entityToDto(Board board){
+    public BoardForm entityToDto(Board board, Long commentCnt){
         BoardForm dto = BoardForm.builder()
                 .id(board.getId())
                 .title(board.getTitle())
@@ -88,6 +96,7 @@ public class BoardService {
                 .regDate(board.getRegDate())
                 .modDate(board.getRegDate())
                 .build();
+        dto.setCommentCnt(commentCnt.intValue());
         return dto;
     }
 }

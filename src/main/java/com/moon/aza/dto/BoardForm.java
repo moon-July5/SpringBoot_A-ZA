@@ -24,6 +24,8 @@ public class BoardForm {
 
     private LocalDateTime regDate, modDate;
 
+    private int commentCnt;
+
     private List<CommentDTO> comments;
 
 }
