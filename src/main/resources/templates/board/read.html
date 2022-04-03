@@ -29,7 +29,7 @@
                 </div>
             </form>
             <div class="commentList">
-                <h4>댓글</h4>
+                <h4>댓글 ([[${boardForm.commentCnt}]])</h4>
                 <ul class="list-group"></ul>
             </div>
             <div class="comment">
@@ -121,7 +121,7 @@
                             str += '        <div class="date">'+formatDate(comment.regDate)+'</div></div>';
                             str += '    <div class="d-flex">';
                             str += '    <div class="text-monospace mr-1 flex-fill">'+comment.text+'</div>';
-                            if(currentMember == writer){
+                            if(currentMember == comment.nickname){
                             str += '    <button id="modify" class="badge btn-warning" onclick="modifyForm('+comment.commentNum+',\''+comment.text+'\')">수정</button>';
                             str += '    <button class="badge btn-danger" onclick=commentRemove('+comment.commentNum+')>삭제</button>';
                             }
