@@ -34,7 +34,7 @@ public class Board extends BaseEntity {
     private Member member;
 
 
-    @OneToMany(mappedBy = "board" ,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board" ,fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     public void modifyTitle(String title){this.title = title;}
