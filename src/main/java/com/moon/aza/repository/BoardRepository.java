@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    @Query("select b, count(distinct c) from Board b " +
+    @Query("select b, count(c) from Board b " +
             "left outer join Comment c on c.board = b " +
             "group by b")
     Page<Object[]> getListPage(Pageable pageable);

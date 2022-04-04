@@ -44,7 +44,7 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{boardId}/{commentNum}")
-    public ResponseEntity<Long> removeReview(@PathVariable("commentNum") Long commentNum){
+    public ResponseEntity<Long> removeComment(@PathVariable("commentNum") Long commentNum){
         log.info("commentNum : "+commentNum);
         commentService.remove(commentNum);
         return new ResponseEntity<>(commentNum, HttpStatus.OK);

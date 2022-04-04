@@ -26,6 +26,4 @@ public class BoardForm {
 
     private int commentCnt;
 
-    private List<CommentDTO> comments;
-
 }
