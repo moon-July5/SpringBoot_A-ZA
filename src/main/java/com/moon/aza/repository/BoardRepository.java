@@ -1,6 +1,7 @@
 package com.moon.aza.repository;
 
 import com.moon.aza.entity.Board;
+import com.moon.aza.repository.search.SearchBoardRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardRepository extends JpaRepository<Board, Long>, SearchBoardRepository {
     @Query("select b, count(c) from Board b " +
             "left outer join Comment c on c.board = b " +
             "group by b")

@@ -23,9 +23,11 @@
                     <div th:utext="${boardForm.contents}"></div>
                 </div>
                 <div class="read__button">
-                    <button type="button" class="btn btn-secondary modifyButton" th:onclick="|location.href='@{/board/modify(id=${boardForm.id}, page=${pageRequestDTO.page})}'|">수정</button>
+                    <button type="button" class="btn btn-secondary modifyButton" th:onclick="|location.href='@{/board/modify(id=${boardForm.id}, page=${pageRequestDTO.page}, 
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}'|">수정</button>
                     <button type="submit" class="btn btn-danger removeButton">삭제</button>
-                    <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page})}'|">목록</button>
+                    <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page}, 
+                    type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}'|">목록</button>
                 </div>
             </form>
             <div class="commentList">

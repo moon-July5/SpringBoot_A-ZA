@@ -10,17 +10,19 @@
                     <a th:href="@{/}"><span class="header__title">A-ZA</span></a>
                 </h1>
                 <div class="header__center">
-                    <form class="header__form" onsubmit="return false;">
+                    <form class="header__form" th:action="@{/board}" method="GET">
+                        <input type="hidden" name="page" value="1">
                         <div class="header__select">
                             <select name="type" class="header__select--type">
-                                <option value="tc">제목+내용</option>
-                                <option value="t" >제목</option>
-                                <option value="c" >내용</option>
-                                <option value="w" >작성자</option>
+                                <option value="tc" th:selected="${pageRequestDTO.type=='tc'}">제목+내용</option>
+                                <option value="t"  th:selected="${pageRequestDTO.type=='t'}">제목</option>
+                                <option value="c"  th:selected="${pageRequestDTO.type=='c'}">내용</option>
+                                <option value="w"  th:selected="${pageRequestDTO.type=='w'}">작성자</option>
                             </select>
                         </div>
-                        <input class="header__input--text" placeholder="게시글 검색">
-                        <button class="header__input--button">검색</button>
+                        <input class="header__input--text" name="keyword" th:value="${pageRequestDTO.keyword}" 
+                        placeholder="게시글 검색">
+                        <button type="submit" class="header__input--button">검색</button>
                     </form>
                 </div>
                 <div class="header__end">

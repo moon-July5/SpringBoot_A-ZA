@@ -5,7 +5,10 @@ import com.moon.aza.dto.PageRequestDTO;
 import com.moon.aza.dto.PageResultDTO;
 import com.moon.aza.entity.Board;
 import com.moon.aza.entity.Member;
+import com.moon.aza.entity.QBoard;
 import com.moon.aza.repository.BoardRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,36 @@ import java.util.stream.Collectors;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+
+    // Querydsl 검색 처리
+    public BooleanBuilder getSearch(PageRequestDTO requestDTO){
+        String type = requestDTO.getType();
+        String keyword = requestDTO.getKeyword();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QBoard qBoard = QBoard.board;
+        BooleanExpression expression = qBoard.id.gt(0L); // 0보다 큰 id값 조건 생성
+        booleanBuilder.and(expression);
+
+        // 검색 조건이 없는 경우
+        if(type==null || type.trim().length()==0)
+            return booleanBuilder;
+
+        // 검색 조건
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+        if(type.contains("t")) // 제목
+            conditionBuilder.or(qBoard.title.contains(keyword));
+        if(type.contains("c")) // 내용
+            conditionBuilder.or(qBoard.contents.contains(keyword));
+        if(type.contains("w")) // 작성자
+            conditionBuilder.or(qBoard.writer.contains(keyword));
+
+        // 모든 조건 통합
+        booleanBuilder.and(conditionBuilder);
+
+        return booleanBuilder;
+    }
 
     // 게시글 작성 로직
     public Board register(BoardForm boardForm){
@@ -76,9 +109,12 @@ public class BoardService {
     // 페이징 처리
     public PageResultDTO<BoardForm, Object[]> getList(PageRequestDTO requestDTO){
         Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
+        BooleanBuilder booleanBuilder = getSearch(requestDTO);
 
         //Page<Board> result = boardRepository.findAll(pageable);
-        Page<Object[]> result = boardRepository.getListPage(pageable);
+        //Page<Object[]> result = boardRepository.getListPage(pageable);
+        Page<Object[]> result = boardRepository.searchBoard(booleanBuilder, pageable);
+
         Function<Object[], BoardForm> fn = (arr -> entityToDto(
                 (Board) arr[0],
                 (Long) arr[1]
