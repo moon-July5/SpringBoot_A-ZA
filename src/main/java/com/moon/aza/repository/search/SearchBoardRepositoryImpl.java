@@ -18,7 +18,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport implements SearchBoardRepository {
+public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport
+        implements SearchBoardRepository {
+
     public SearchBoardRepositoryImpl() {super(Board.class);}
 
     @Override

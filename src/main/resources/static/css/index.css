@@ -11,6 +11,35 @@
     justify-content: space-between;
 
 }
+.content__search{
+    width:50%;
+}
+.search__form{
+    display: flex;
+    max-width: 100%;
+}
+.search__select--type{
+    height: 40px;
+    margin-right: 2px;
+    border-right: none;
+    border-radius: 2px;
+    border : 1px solid #8f8f8f;
+}
+.search__input--text{
+    width: calc(100% - 60px);
+    height: 40px;
+    padding: 0 6px;
+    border: 1px solid #8f8f8f;
+    border-right: none;
+    border-radius: 2px 0 0 2px;
+}
+.search__input--button{
+    width: 60px;
+    height: 40px;
+    border: 1px solid #8f8f8f;
+    border-left: none;
+    border-radius: 0 2px 2px 0;
+}
 .content__center{
     font-family: 'cookie';
     width : 80vw;
