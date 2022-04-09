@@ -54,4 +54,10 @@ public class Member extends BaseEntity {
     public boolean enableToSendEmail(){
         return this.emailTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(5));
     }
+
+    public void changeNickname(String nickname){
+        this.nickname = nickname;
+    }
+    public void changePassword(String password) { this.password = password; }
+
 }

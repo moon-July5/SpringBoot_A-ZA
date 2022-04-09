@@ -36,6 +36,17 @@ public class MemberService implements UserDetailsService {
     @Value("${spring.mail.username}")
     private String from;
 
+    public void changePassword(Member member, String password){
+        member.changePassword(passwordEncoder.encode(password));
+        memberRepository.save(member);
+
+    }
+    public void changeNickname(Member member, String nickname){
+        member.changeNickname(nickname);
+        memberRepository.save(member);
+        login(member);
+    }
+
     /* 사용자 정보 조회 */
     @Override
     @Transactional(readOnly = true) // 조회 용도로만 사용

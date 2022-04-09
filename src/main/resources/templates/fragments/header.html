@@ -23,15 +23,27 @@
                     <button class="nav__icon" th:onclick="|location.href='@{/login}'|"><img class="nav__img" th:src="@{/imgs/login-icon.png}"></button>
                     <button class="nav__menu" th:onclick="|location.href='@{/login}'|">로그인</button>
                 </li>
-                <li>
-                    <button class="nav__icon" th:onclick="|location.href='@{/board}'|"><img class="nav__img" th:src="@{/imgs/board.png}"></button>
-                    <button class="nav__menu" th:onclick="|location.href='@{/board}'|">게시판</button>
-                </li>
                 <li sec:authorize="isAuthenticated()">
                     <button class="nav__icon" th:onclick="|location.href='@{/logout}'|"><img class="nav__img" th:src="@{/imgs/logout-icon.png}"></button>
                     <button class="nav__menu" th:onclick="|location.href='@{/logout}'|">로그아웃</button>
                 </li>
-
+                <li>
+                    <button class="nav__icon" th:onclick="|location.href='@{/board}'|"><img class="nav__img" th:src="@{/imgs/board.png}"></button>
+                    <button class="nav__menu" th:onclick="|location.href='@{/board}'|">게시판</button>
+                </li>
+          
+                <li sec:authorize="isAuthenticated()">         
+                    <button class="nav__icon"><img class="nav__img" th:src="@{/imgs/manage-icon.png}"></button>
+                    <button class="nav__menu collapsed" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">개인정보 설정</button>
+                    <li sec:authorize="isAuthenticated()">
+                        <button id="flush-collapseOne" class="nav__icon collapse tab" th:onclick="|location.href='@{/settings/nickname}'|" style="font-size: 1rem;"><img class="nav__img" th:src="@{/imgs/pencil-icon.png}"></button>
+                        <button id="flush-collapseOne" class="nav__menu collapse" th:onclick="|location.href='@{/settings/nickname}'|" style="font-size: 1rem;"> 닉네임 변경 </button>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <button id="flush-collapseOne" class="nav__icon collapse tab" th:onclick="|location.href='@{/settings/password}'|" style="font-size: 1rem;"><img class="nav__img" th:src="@{/imgs/pencil-icon.png}"></button>
+                        <button id="flush-collapseOne" class="nav__menu collapse" th:onclick="|location.href='@{/settings/password}'|" style="font-size: 1rem;"> 비밀번호 변경 </button>
+                    </li>
+                </li>
             </ul>
         </nav>
 

@@ -1,7 +1,7 @@
 /*content 영역*/
 .content{
-    margin: 60px 40px 0 200px;
-    padding: 20px 0 0 10px;
+    margin: 60px 40px 0 250px;
+    padding: 20px 0 0 20px;
 }
 .content__top{
     font-family: 'cookie';
@@ -11,6 +11,7 @@
     justify-content: space-between;
 
 }
+/*search*/
 .content__search{
     width:50%;
 }
@@ -40,9 +41,10 @@
     border-left: none;
     border-radius: 0 2px 2px 0;
 }
+
 .content__center{
     font-family: 'cookie';
-    width : 80vw;
+    width : 76vw;
    
     background-color: #f5f5f5;
     box-shadow: 3px 3px 5px;
