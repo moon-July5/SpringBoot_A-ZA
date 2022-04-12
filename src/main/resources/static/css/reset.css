@@ -51,3 +51,6 @@ table {
 .marker{
 	background-color: yellow;
 }
+li{
+	list-style: none;
+}

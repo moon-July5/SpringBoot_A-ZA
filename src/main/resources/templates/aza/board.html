@@ -42,12 +42,21 @@
             <tbody>
               <tr th:each="dto : ${result?.dtoList}">
                 <th scope="row"><a th:href="@{/board/read(id=${dto.id}, page=${result.page})}">[[${dto.title}]] ([[${dto.commentCnt}]])</a></th>
-                <td>[[${dto.writer}]]</td>
+                  <td class="dropdown">
+                    <a class="dropdown-toggle" role="button" data-bs-toggle="dropdown" style="cursor: pointer;">
+                      [[${dto.writer}]]
+                    </a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" th:href="@{/}">작성글 보기</a>
+                    </div>
+                  </td>
                 <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
               </tr>
             </tbody>
           </table>
+         
         </div>
+   
         <!--페이지-->
         <div class="content__end">
           <ul class="pagination h-100 justify-content-center align-items-center">
