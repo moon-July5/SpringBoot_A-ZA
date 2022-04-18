@@ -1,0 +1,24 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/basic}">
+    <th:block layout:fragment="content">
+        <div class="nickname" style="margin: 60px 40px 0 250px; padding: 20px 0 0 20px;">
+            <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                <span th:text="${message}">수정 완료</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>  
+            <div class="nickname__top" style="font-family: 'cookie'; font-size: 1.8rem; margin-bottom: 15px; display: flex; justify-content: space-between;">
+                <h1>닉네임 변경</h1>
+            </div>
+            <form class="needs-validation col-12 mb-3" th:object="${nicknameForm}" th:action="@{/settings/nickname}" method="POST">
+                <div class="mb-3">
+                    <lable for="nickname" class="form-label" hidden>닉네임</lable>
+                    <input type="text" th:field="*{nickname}" class="form-control" placeholder="변경할 닉네임을 입력해주세요.">
+                    <div class="invalid-feedback">닉네임을 입력하세요.</div>
+                    <div class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">nickname Error</div>
+                </div>
+                <button type="submit" class="btn btn-outline-primary">변경하기</button>
+            </form>
+        </div>
+    </th:block>
+</html>    
