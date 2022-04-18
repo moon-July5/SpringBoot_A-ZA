@@ -83,8 +83,9 @@ public class BoardService {
         List<Object[]> result = boardRepository.getBoardWithAll(id);
         Board board = (Board) result.get(0)[0];
         Long commentCnt = (Long) result.get(0)[1];
+        Long likesCnt = (Long) result.get(0)[2];
 
-        return entityToDto(board, commentCnt);
+        return entityToDto(board, commentCnt, likesCnt);
     }
     // 게시글 수정
     @Transactional
@@ -116,13 +117,14 @@ public class BoardService {
 
         Function<Object[], BoardForm> fn = (arr -> entityToDto(
                 (Board) arr[0],
-                (Long) arr[1]
+                (Long) arr[1],
+                (Long) arr[2]
         ));
 
         return new PageResultDTO<>(result, fn);
     }
     // entity -> dto
-    public BoardForm entityToDto(Board board, Long commentCnt){
+    public BoardForm entityToDto(Board board, Long commentCnt, Long likesCnt){
         BoardForm dto = BoardForm.builder()
                 .id(board.getId())
                 .title(board.getTitle())
@@ -132,6 +134,7 @@ public class BoardService {
                 .modDate(board.getRegDate())
                 .build();
         dto.setCommentCnt(commentCnt.intValue());
+        dto.setLikesCnt(likesCnt.intValue());
         return dto;
     }
 }

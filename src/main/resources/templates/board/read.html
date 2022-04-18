@@ -28,6 +28,8 @@
                     <button type="submit" class="btn btn-danger removeButton">삭제</button>
                     <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page}, 
                     type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}'|">목록</button>
+                    <button type="button" class="btn btn-outline-danger likes"><img class="img" th:src="@{/imgs/likes-icon.png}" 
+                        style="width:1.3rem;height: 1.3rem; padding-right: 3px; padding-bottom: 3px;">추천</button>     
                 </div>
             </form>
             <div class="commentList">
@@ -56,6 +58,28 @@
                         $('.removeButton').hide();
                     }
                 }
+                $('.likes').click(function(){
+                    var data = {memberId : memberId, boardId : boardId};
+                    console.log(data);
+                    if(currentMember==null){
+                        alert("로그인 하셔야합니다.");
+                    } else {
+                        $.ajax({
+                            url : '/board/'+boardId+'/likes',
+                            type : 'POST',
+                            contentType : 'application/json; charset=utf-8',
+                            dataType : 'json',
+                            data : JSON.stringify(data),
+                        success : function(result){
+                            console.log("success : " +result);
+                        },
+                        error : function(error){
+                            console.log("error : "+error)
+                        }
+
+                        });
+                    }
+                });
            
                 $('.removeButton').click(function(){
                     if(!confirm("정말 삭제하시겠습니까?")){

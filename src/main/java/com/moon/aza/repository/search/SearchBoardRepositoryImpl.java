@@ -3,6 +3,7 @@ package com.moon.aza.repository.search;
 import com.moon.aza.entity.Board;
 import com.moon.aza.entity.QBoard;
 import com.moon.aza.entity.QComment;
+import com.moon.aza.entity.QLikes;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
@@ -27,11 +28,13 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport
     public Page<Object[]> searchBoard(BooleanBuilder booleanBuilder, Pageable pageable) {
         QBoard qBoard = QBoard.board;
         QComment qComment = QComment.comment;
+        QLikes qLikes = QLikes.likes;
 
         JPQLQuery<Board> jpqlQuery = from(qBoard);
         jpqlQuery.leftJoin(qComment).on(qComment.board.eq(qBoard));
+        jpqlQuery.leftJoin(qLikes).on(qLikes.board.eq(qBoard));
 
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(qBoard, qComment.countDistinct());
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(qBoard, qComment.countDistinct(), qLikes.countDistinct());
         tuple.where(booleanBuilder);
         tuple.groupBy(qBoard);
 

@@ -37,6 +37,7 @@
                 <th scope="col">제목</th>
                 <th scope="col">작성자</th>
                 <th scope="col">날짜</th>
+                <th scope="col">추천</th>
               </tr>
             </thead>
             <tbody>
@@ -47,10 +48,11 @@
                       [[${dto.writer}]]
                     </a>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" th:href="@{/}">작성글 보기</a>
+                      <a class="dropdown-item" style="cursor: pointer;">작성글 보기</a>
                     </div>
                   </td>
                 <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                <td style="color: red;">[[${dto.likesCnt}]]</td>
               </tr>
             </tbody>
           </table>
@@ -74,6 +76,10 @@
           </ul>
         </div>
       </section>
-
+      <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function(){
+      
+        });
+      </script>
     </th:block>
 </html>

@@ -4,6 +4,7 @@ import com.moon.aza.dto.PageRequestDTO;
 import com.moon.aza.dto.SignUpForm;
 import com.moon.aza.entity.Member;
 import com.moon.aza.service.BoardService;
+import com.moon.aza.service.LikesService;
 import com.moon.aza.support.CurrentMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
     private final BoardService boardService;
+    private final LikesService likesService;
 
     /* 홈(메인) 페이지 */
     @GetMapping("/")

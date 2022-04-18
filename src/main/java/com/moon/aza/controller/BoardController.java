@@ -1,10 +1,12 @@
 package com.moon.aza.controller;
 
 import com.moon.aza.dto.BoardForm;
+import com.moon.aza.dto.LikesDTO;
 import com.moon.aza.dto.PageRequestDTO;
 import com.moon.aza.entity.Board;
 import com.moon.aza.entity.Member;
 import com.moon.aza.service.BoardService;
+import com.moon.aza.service.LikesService;
 import com.moon.aza.support.CurrentMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class BoardController {
     private final BoardService boardService;
-
+    private final LikesService likesService;
 
     /* 글 작성 페이지 */
     @GetMapping("/register")
@@ -36,6 +38,7 @@ public class BoardController {
         model.addAttribute("boardForm", boardForm);
         if(member != null)
             model.addAttribute(member);
+
     }
 
     @PostMapping("/register")
@@ -60,5 +63,10 @@ public class BoardController {
         boardService.remove(id);
         return "redirect:/board";
     }
+    @PostMapping("/{boardId}/likes")
+    public @ResponseBody void likes(@RequestBody LikesDTO likesDTO, Model model){
+        log.info("LikesDTO : "+likesDTO);
+        Boolean likes = likesService.pushLike(likesDTO);
 
+    }
 }
