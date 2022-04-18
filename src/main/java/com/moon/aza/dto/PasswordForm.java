@@ -1,6 +1,5 @@
 package com.moon.aza.dto;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

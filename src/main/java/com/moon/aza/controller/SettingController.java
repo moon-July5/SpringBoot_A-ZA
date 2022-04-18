@@ -8,6 +8,7 @@ import com.moon.aza.support.CurrentMember;
 import com.moon.aza.validator.NicknameFormValidator;
 import com.moon.aza.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Map;
 
+@Log4j2
 @RequiredArgsConstructor
 @Controller
 public class SettingController {
@@ -30,19 +31,17 @@ public class SettingController {
     // 패스워드 변경
     @GetMapping("/settings/password")
     public void passwordForm(@CurrentMember Member member, Model model){
+        log.info("/settings/password");
         model.addAttribute(member);
         model.addAttribute(new PasswordForm());
     }
+
     // 패스워드 변경
     @PostMapping("/settings/password")
     public String changePassword(@CurrentMember Member member, @Valid PasswordForm passwordForm,
                                  Errors errors, Model model, RedirectAttributes redirectAttributes){
         if(errors.hasErrors()){
-            Map<String, String> validatorResult = memberService.validateHandling(errors);
-
-            for(String key : validatorResult.keySet()){
-                model.addAttribute(key, validatorResult.get(key));
-            }
+            model.addAttribute(member);
             return "/settings/password";
         }
 
@@ -53,6 +52,7 @@ public class SettingController {
     // 닉네임 변경
     @GetMapping("/settings/nickname")
     public void nicknameForm(@CurrentMember Member member, Model model){
+        log.info("/settings/nickname");
         model.addAttribute(member);
         model.addAttribute(new NicknameForm(member.getNickname()));
 
