@@ -28,8 +28,8 @@
                     <button type="submit" class="btn btn-danger removeButton">삭제</button>
                     <button type="button" class="btn btn-info" th:onclick="|location.href='@{/board(page=${pageRequestDTO.page}, 
                     type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}'|">목록</button>
-                    <button type="button" class="btn btn-outline-danger likes"><img class="img" th:src="@{/imgs/likes-icon.png}" 
-                        style="width:1.3rem;height: 1.3rem; padding-right: 3px; padding-bottom: 3px;">추천</button>     
+                    <button type="button" id="likes" class="btn" th:classappend="${likes ? 'btn-danger' : 'btn-outline-danger'}"><img class="img" th:src="@{/imgs/likes-icon.png}" 
+                        style="width:1.3rem;height: 1.3rem; padding-right: 3px; padding-bottom: 3px;">추천<span class="cnt"> [[${boardForm.likesCnt}]]</span></button>     
                 </div>
             </form>
             <div class="commentList">
@@ -51,6 +51,7 @@
                 var memberId = [[${member?.id}]];
                 var boardId =[[${boardForm.id}]];
                 var text = $('textarea[name="text"]');
+                var cnt = Number($('.cnt').text());
                 // 버튼 숨기기
                 function showButton(){
                     if(currentMember != writer){
@@ -58,7 +59,7 @@
                         $('.removeButton').hide();
                     }
                 }
-                $('.likes').click(function(){
+                $('#likes').click(function(){
                     var data = {memberId : memberId, boardId : boardId};
                     console.log(data);
                     if(currentMember==null){
@@ -68,13 +69,22 @@
                             url : '/board/'+boardId+'/likes',
                             type : 'POST',
                             contentType : 'application/json; charset=utf-8',
-                            dataType : 'json',
                             data : JSON.stringify(data),
                         success : function(result){
                             console.log("success : " +result);
+                            if(!result) {
+                                $('#likes').prop("class","btn btn-outline-danger");
+                                cnt -= 1;
+                                $('.cnt').html('&nbsp;'+cnt);
+                            } else {
+                                $('#likes').prop("class","btn btn-danger");
+                                cnt += 1
+                                $('.cnt').html('&nbsp;'+cnt);
+                            }
+                         
                         },
-                        error : function(error){
-                            console.log("error : "+error)
+                        error : function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                         }
 
                         });

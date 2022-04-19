@@ -32,11 +32,4 @@ public class LikesCustomRepositoryImpl extends QuerydslRepositorySupport
         return Optional.ofNullable(likes);
     }
 
-    @Override
-    public long findBoardLikesNum(Long boardId) {
-        JPQLQuery<Likes> jpqlQuery = from(qLikes).select(qLikes);
-        jpqlQuery.where(qLikes.board.id.eq(boardId));
-        long count = jpqlQuery.fetchCount();
-        return count;
-    }
 }

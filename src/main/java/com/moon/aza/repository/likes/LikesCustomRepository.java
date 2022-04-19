@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface LikesCustomRepository {
     Optional<Likes> exist(Long memberId, Long boardId);
-    long findBoardLikesNum(Long boardId);
+
 }

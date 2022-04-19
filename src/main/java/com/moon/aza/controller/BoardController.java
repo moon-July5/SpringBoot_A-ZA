@@ -10,6 +10,8 @@ import com.moon.aza.service.LikesService;
 import com.moon.aza.support.CurrentMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,9 @@ public class BoardController {
         if(member != null)
             model.addAttribute(member);
 
+        // 추천을 누른 사용자 확인
+        Boolean likes = likesService.findLike(member.getId(), id);
+        model.addAttribute("likes", likes);
     }
 
     @PostMapping("/register")
@@ -64,9 +69,9 @@ public class BoardController {
         return "redirect:/board";
     }
     @PostMapping("/{boardId}/likes")
-    public @ResponseBody void likes(@RequestBody LikesDTO likesDTO, Model model){
+    public @ResponseBody ResponseEntity<Boolean> likes(@RequestBody LikesDTO likesDTO, Model model){
         log.info("LikesDTO : "+likesDTO);
         Boolean likes = likesService.pushLike(likesDTO);
-
+        return new ResponseEntity<>(likes, HttpStatus.OK);
     }
 }
