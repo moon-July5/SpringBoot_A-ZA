@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -27,6 +28,37 @@ public class MemberController {
     private final SignUpFormValidator signUpFormValidator;
     private final MemberService memberService;
 
+    /*이메일 로그인 페이지*/
+    @GetMapping("/email-login")
+    public String emailLogin(){
+        log.info("/member/email-login");
+        return "/aza/email-login";
+    }
+    @PostMapping("/email-login")
+    public String sendLinkForEmailLogin(String email, Model model, RedirectAttributes redirectAttributes) throws MessagingException{
+        Member member = memberService.findByEmail(email);
+        if(member==null){
+            model.addAttribute("error","유효한 이메일 주소가 아닙니다.");
+            return "/aza/email-login";
+        }
+        if(!member.enableToSendEmail()){
+            model.addAttribute("error","이메일 전송은 5분에 한 번만 전송할 수 있습니다.");
+            return "/aza/email-login";
+        }
+        memberService.sendLoginLink(member);
+        redirectAttributes.addFlashAttribute("message","로그인 가능한 링크를 성공적으로 이메일로 전송하였습니다.");
+        return "redirect:/member/email-login";
+    }
+    @GetMapping("/login-by-email")
+    public String loginByEmail(String token, String email, Model model){
+        Member member = memberService.findByEmail(email);
+        if(member==null || !member.isValid(token)){
+            model.addAttribute("error","로그인 할 수 없습니다.");
+            return "/aza/logged-in-by-email";
+        }
+        memberService.login(member);
+        return "/aza/logged-in-by-email";
+    }
 
     /* 이메일 인증 페이지*/
     @GetMapping("/email-check")

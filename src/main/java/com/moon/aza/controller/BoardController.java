@@ -38,12 +38,14 @@ public class BoardController {
         log.info("id : "+id);
         BoardForm boardForm = boardService.read(id);
         model.addAttribute("boardForm", boardForm);
-        if(member != null)
+        if(member != null) {
             model.addAttribute(member);
-
-        // 추천을 누른 사용자 확인
-        Boolean likes = likesService.findLike(member.getId(), id);
-        model.addAttribute("likes", likes);
+            // 추천을 누른 사용자 확인
+            Boolean likes = likesService.findLike(member.getId(), id);
+            model.addAttribute("likes", likes);
+        } else{
+            model.addAttribute("likes",false);
+        }
     }
 
     @PostMapping("/register")

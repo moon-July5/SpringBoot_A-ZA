@@ -1,10 +1,7 @@
 package com.moon.aza.repository.likes;
 
 import com.moon.aza.entity.Likes;
-import com.moon.aza.entity.QBoard;
 import com.moon.aza.entity.QLikes;
-import com.moon.aza.entity.QMember;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 

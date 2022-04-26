@@ -1,0 +1,20 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/basic}">
+
+    <th:block layout:fragment="content">
+        <div class="logged-in-by-email" style="margin: 60px 40px 0 250px; padding: 20px 0 0 20px;">
+            <div class="py-5 text-center" th:if="${error}">
+                <p class="logged-email" style="font-weight: bold;">이메일 로그인</p>
+                <div  class="alert alert-danger" role="alert" th:text="${error}">
+                    로그인할 수 없습니다.
+                </div>
+            </div>
+        
+            <div class="py-5 text-center" th:if="${error == null}">
+                <p class="logged-email" style="font-weight: bold;">이메일 로그인</p>
+                <h3>이메일로 로그인 했습니다. <a th:href="@{/settings/password}">패스워드를 변경</a>하세요.</h3>
+            </div>
+        </div>
+    </th:block>
+</html>

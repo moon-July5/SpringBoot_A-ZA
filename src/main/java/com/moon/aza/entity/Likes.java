@@ -1,6 +1,5 @@
 package com.moon.aza.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,8 +23,4 @@ public class Likes extends BaseEntity{
     @JoinColumn(name = "board_id")
     private Board board;
 
-    public Likes(Member member, Board board){
-        this.member = member;
-        this.board = board;
-    }
 }

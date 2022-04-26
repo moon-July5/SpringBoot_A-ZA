@@ -20,15 +20,20 @@
                 <div class="form-group">
                     <label style="font-weight:bold; margin-bottom:5px;">비밀번호</label>
                     <input type="password" class="form-control" name="password" placeholder="비밀번호를 입력해주세요" required>
-                    
                 </div>
                 <div class="form-group">
                     <input type="checkbox" class="form-check-input" id="rememberMe"  name="remember-me" checked> 
                     <label class="form-check-label" for="rememberMe">로그인 유지</label>
                 </div><br>
+                <div class="form-group">
+                    <small id="forgotPasswordHelp" class="form-text text-muted">
+                        패스워드를 잊어버렸다면? <a th:href="@{/member/email-login}">이메일로 로그인하기</a>
+                    </small>
+                </div><br>
                 <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}">홈 화면으로</button>
                 <button type="submit" class="btn btn-primary loginButton"><img class="button__icon" th:src="@{/imgs/login-icon-white.png}">로그인</button>
                 <button type="button" th:onclick="|location.href='@{/signup}'|" class="btn btn-info" style="color: white;"><img class="button__icon" th:src="@{/imgs/signup-icon-white.png}">회원가입</button>
+            
             </form>
         </div>
     </th:block>

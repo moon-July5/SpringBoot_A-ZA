@@ -36,6 +36,32 @@ public class MemberService implements UserDetailsService {
     @Value("${spring.mail.username}")
     private String from;
 
+    public void sendLoginLink(Member member) throws MessagingException {
+        member.generateToken();
+        // 메일 보내기
+        MimeMessage mailMessage = mailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage,"UTF-8");
+        StringBuilder body = new StringBuilder();
+        body.append("<html> <body> <span style=\"font-size:16px; font-weight:bold;\">");
+        body.append(member.getNickname()+"님</span> 안녕하세요.<br>");
+        body.append("<p> 이메일을 통해 로그인을 하고 싶으시면 아래의 링크를 클릭하시길 바랍니다. </p><br>");
+        body.append("<a href=\"http://localhost:8080/member/login-by-email?token="
+                +member.getEmailToken()+"&email="+member.getEmail()+"\">");
+        body.append("로그인하기</a></body></html>");
+
+        messageHelper.setFrom(from); // 보내는 사람
+        messageHelper.setTo(member.getEmail()); // 받는 사람
+        messageHelper.setSubject("A-ZA 로그인 링크"); // 메일 제목
+        messageHelper.setText(body.toString(),true); // 메일 내용
+
+        mailSender.send(mailMessage);
+
+    }
+
+    public Member findByEmail(String email){
+        return memberRepository.findByEmail(email);
+    }
+
     public void changePassword(Member member, String password){
         member.changePassword(passwordEncoder.encode(password));
         memberRepository.save(member);
