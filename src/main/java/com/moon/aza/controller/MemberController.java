@@ -1,11 +1,9 @@
 package com.moon.aza.controller;
 
-import com.moon.aza.dto.NicknameForm;
 import com.moon.aza.dto.SignUpForm;
 import com.moon.aza.entity.Member;
 import com.moon.aza.service.MemberService;
 import com.moon.aza.support.CurrentMember;
-import com.moon.aza.validator.NicknameFormValidator;
 import com.moon.aza.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -36,7 +34,7 @@ public class MemberController {
     }
     @PostMapping("/email-login")
     public String sendLinkForEmailLogin(String email, Model model, RedirectAttributes redirectAttributes) throws MessagingException{
-        Member member = memberService.findByEmail(email);
+        Member member = memberService.findMemberByEmail(email);
         if(member==null){
             model.addAttribute("error","유효한 이메일 주소가 아닙니다.");
             return "/aza/email-login";
@@ -51,7 +49,7 @@ public class MemberController {
     }
     @GetMapping("/login-by-email")
     public String loginByEmail(String token, String email, Model model){
-        Member member = memberService.findByEmail(email);
+        Member member = memberService.findMemberByEmail(email);
         if(member==null || !member.isValid(token)){
             model.addAttribute("error","로그인 할 수 없습니다.");
             return "/aza/logged-in-by-email";

@@ -9,6 +9,7 @@ import com.moon.aza.validator.NicknameFormValidator;
 import com.moon.aza.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Log4j2
@@ -26,7 +28,28 @@ import javax.validation.Valid;
 public class SettingController {
     private final NicknameFormValidator nicknameFormValidator;
     private final PasswordFormValidator passwordFormValidator;
+    private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
+
+    // 회원 탈퇴
+    @GetMapping("/settings/member-delete")
+    public void memberForm(@CurrentMember Member member, Model model){
+        log.info("/settings/member-delete");
+        model.addAttribute(member);
+    }
+    // 회원 탈퇴
+    @PostMapping("/settings/member-delete")
+    public String memberDelete(@CurrentMember Member member, String email, String password,
+                               HttpSession httpSession, Model model){
+        Member result = memberService.findMemberByEmail(email);
+        if(result==null || !passwordEncoder.matches(password, member.getPassword())){
+            model.addAttribute("error", "유효하지 않은 정보입니다.");
+            return "/settings/member-delete";
+        }
+        memberService.deleteMember(member);
+        httpSession.invalidate();
+        return "redirect:/";
+    }
 
     // 패스워드 변경
     @GetMapping("/settings/password")

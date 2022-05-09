@@ -1,7 +1,11 @@
 package com.moon.aza.service;
 
 import com.moon.aza.dto.SignUpForm;
+import com.moon.aza.entity.Board;
 import com.moon.aza.entity.Member;
+import com.moon.aza.repository.BoardRepository;
+import com.moon.aza.repository.CommentRepository;
+import com.moon.aza.repository.LikesRepository;
 import com.moon.aza.repository.MemberRepository;
 import com.moon.aza.support.UserMember;
 import lombok.RequiredArgsConstructor;
@@ -22,19 +26,36 @@ import org.springframework.validation.FieldError;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
+    private final BoardRepository boardRepository;
+    private final LikesRepository likesRepository;
+    private final CommentRepository commentRepository;
     private final JavaMailSender mailSender;
     private final PasswordEncoder passwordEncoder;
     @Value("${spring.mail.username}")
     private String from;
+
+    public void deleteMember(Member member){
+        List<Long> boardIds = boardRepository.findByMemberId(member.getId());
+        List<Long> likesIds = likesRepository.findByMemberId(member.getId());
+        List<Long> commentIds = commentRepository.findByMemberId(member.getId());
+        if(!commentIds.isEmpty()){
+            commentRepository.deleteAllByIdIn(commentIds);
+        }
+        if(!likesIds.isEmpty()){
+            likesRepository.deleteAllByIdIn(likesIds);
+        }
+        if(!boardIds.isEmpty()){
+            boardRepository.deleteAllByIdIn(boardIds);
+        }
+        memberRepository.deleteById(member.getId());
+    }
 
     public void sendLoginLink(Member member) throws MessagingException {
         member.generateToken();
@@ -56,10 +77,6 @@ public class MemberService implements UserDetailsService {
 
         mailSender.send(mailMessage);
 
-    }
-
-    public Member findByEmail(String email){
-        return memberRepository.findByEmail(email);
     }
 
     public void changePassword(Member member, String password){

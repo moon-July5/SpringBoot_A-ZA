@@ -42,6 +42,10 @@
                         <button id="flush-collapseOne" class="nav__icon collapse tab" th:onclick="|location.href='@{/settings/password}'|" style="font-size: 1rem;"><img class="nav__img" th:src="@{/imgs/pencil-icon.png}"></button>
                         <button id="flush-collapseOne" class="nav__menu collapse" th:onclick="|location.href='@{/settings/password}'|" style="font-size: 1rem;"> 비밀번호 변경 </button>
                     </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <button id="flush-collapseOne" class="nav__icon collapse tab" th:onclick="|location.href='@{/settings/member-delete}'|" style="font-size: 1rem;"><img class="nav__img" th:src="@{/imgs/delete-icon.png}"></button>
+                        <button id="flush-collapseOne" class="nav__menu collapse" th:onclick="|location.href='@{/settings/member-delete}'|" style="font-size: 1rem;"> 회원 탈퇴 </button>
+                    </li>
                 </li>
             </ul>
         </nav>
