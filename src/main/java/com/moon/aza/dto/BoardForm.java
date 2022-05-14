@@ -27,4 +27,10 @@ public class BoardForm {
     private int commentCnt;
 
     private int likesCnt;
+
+    public BoardForm(String title, String contents){
+        this.title = title;
+        this.contents = contents;
+    }
+
 }

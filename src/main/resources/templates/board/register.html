@@ -5,14 +5,20 @@
     <head>
         <link rel="stylesheet" th:href="@{/css/register.css}">
         <script th:src="@{/js/ckeditor/ckeditor.js}"></script>
+
     </head>
     <th:block layout:fragment="content">
         <div class="board__register">
             <div class="register__top">
                 <h1>게시글 작성</h1>
             </div>
-            <form th:action="@{/board/register}" method="post" th:object="${boardForm}">
+            <div th:if="${success}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                <span th:text="${success}">임시저장 완료</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form name="form" th:action="@{/board/register}" method="post" th:object="${boardForm}">
                 <input type="hidden" id="id" name="id" th:value="${member?.id}"/>
+                <input type="hidden" id="tid" name="tid" th:value="${tid}"/>
                 <div class="form-group" style="font-weight:bold; margin-bottom:15px;">
                     <label>제목</label>
                     <input type="text" class="form-control" name="title" th:field="*{title}" required>
@@ -25,10 +31,41 @@
                     <label>내용</label>
                     <textarea class="form-control" row="5" name="contents" id="contents" th:field="*{contents}" required></textarea>
                 </div><br>
-                <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}"> 홈 화면으로</button>
-                <button type="submit" class="btn btn-primary"><img class="button__icon" th:src="@{/imgs/register-white.png}">등록하기</button>
+                <div class="form-group" style="margin-bottom: 5%;">
+                    <button type="button" th:onclick="|location.href='@{/}'|" class="btn btn-secondary"><img class="button__icon" th:src="@{/imgs/home-icon-white.png}"> 홈 화면으로</button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-light btn-temp">임시등록</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#temporary" class="btn btn-light btn-count" style="color: red;">[[${count}]]</button>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><img class="button__icon" th:src="@{/imgs/register-white.png}">등록하기</button>
+                </div>    
             </form>
-        </div> 
+        </div>
+        <!-- Modal -->
+        <div class="modal fade modal-dialog-scrollable" id="temporary" tabindex="-1" role="dialog" aria-labelledby="temporaryLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="temporaryLabel" style="font-weight: bold;" >임시등록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr th:each="temp : ${result}" style="font-size: 0.9rem;">
+                                <th scope="row"><a th:href="@{/board/register(id=${temp.id})}" onclick='return confirm("임시등록된 제목과 내용을 불러오시겠습니까?\n작성 중인 제목과 내용은 제거됩니다.");' 
+                                    style="text-decoration:none; color:black">[[${temp.title}]]</a></th>
+                                <td>[[${#temporals.format(temp.regDate, 'yyyy/MM/dd')}]]</td>
+                                <td><button type="button" class="btn-close temp-delete" th:attr="onclick=|tempRemove('${temp.id}',this)|"></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- Modal -->
+
         <script type="text/javascript" th:inline="javascript">
             $(document).ready(function(){
                 CKEDITOR.replace('contents',{ 
@@ -48,8 +85,44 @@
                             break;
                     }
                 });
+                $('.btn-temp').click(function(){
+                    
+                    let form = document.form;
+                    form.action = '/board/temporary-register';
+                    form.method = 'POST';
+
+                    if(!confirm("임시등록 하시겠습니까?\n작성 중인 제목과 내용은 제거됩니다.")){
+                        return false;
+                    } else {
+                        form.submit();
+                    }
+                });
+               
 
             });
+            function tempRemove(id, obj){
+                var data = {id : id};
+                var count = [[${count}]];
+
+                var tr = $(obj).parent().parent();
+                if(confirm("삭제하시겠습니까? ")){
+                    $.ajax({
+                    url : '/board/temporary-remove/'+id,
+                    type: 'DELETE',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        console.log("result : "+result);
+                        tr.remove();
+                        $('.btn-count').html(result);
+                    },
+                    error: function (error) {
+                        console.log("error : " + error);
+                    }
+
+                    });
+                }
+            }
         </script>  
     </th:block>
     

@@ -1,7 +1,6 @@
 package com.moon.aza.repository;
 
 import com.moon.aza.entity.Board;
-import com.moon.aza.entity.Member;
 import com.moon.aza.repository.search.SearchBoardRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

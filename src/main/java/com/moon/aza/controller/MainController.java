@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
     private final BoardService boardService;
-    private final LikesService likesService;
-
     /* 홈(메인) 페이지 */
     @GetMapping("/")
     public String home(@CurrentMember Member member, Model model) {

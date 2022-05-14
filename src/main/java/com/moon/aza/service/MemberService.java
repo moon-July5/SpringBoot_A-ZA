@@ -1,7 +1,6 @@
 package com.moon.aza.service;
 
 import com.moon.aza.dto.SignUpForm;
-import com.moon.aza.entity.Board;
 import com.moon.aza.entity.Member;
 import com.moon.aza.repository.BoardRepository;
 import com.moon.aza.repository.CommentRepository;
