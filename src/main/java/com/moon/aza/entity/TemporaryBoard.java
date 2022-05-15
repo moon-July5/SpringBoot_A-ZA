@@ -1,8 +1,6 @@
 package com.moon.aza.entity;
 
 import lombok.*;
-import org.hibernate.annotations.Formula;
-
 import javax.persistence.*;
 
 @ToString

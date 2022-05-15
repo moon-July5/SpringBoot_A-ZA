@@ -33,7 +33,6 @@ public class BoardController {
                                     RedirectAttributes redirectAttributes){
         TemporaryBoard temporaryBoard = temporaryBoardService.register(boardForm);
         redirectAttributes.addFlashAttribute("success", "성공적으로 저장되었습니다.");
-        redirectAttributes.addFlashAttribute("member", member);
 
         return "redirect:/board/register";
     }
