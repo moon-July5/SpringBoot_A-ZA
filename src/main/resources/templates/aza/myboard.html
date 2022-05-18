@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout/basic}">
+    <head>
+        <link rel="stylesheet" th:href="@{/css/index.css}">
+    </head>
+    <th:block layout:fragment="content">
+      <!--게시판 영역-->
+      <section class="content">
+        <div class="content__top">
+          <h1>게시판</h1>
+          <div th:if="${success}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+            <span th:text="${success}">처리 완료</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <button class="btn btn-danger deleteBtn">삭제</button>
+        </div>
+        <div class="content__center">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">날짜</th>
+                <th scope="col">추천</th>
+                <th scope="col"><input type="checkbox" id="checkAllDelete" name="checkAllDelete"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:if="${result.totalPage}==0">
+                <td colspan="5" style="text-align: center;">작성한 게시글이 없습니다.</td>
+              </tr>
+              <tr th:each="dto : ${result?.dtoList}">
+                <th scope="row"><a th:href="@{/board/read(id=${dto.id}, page=${result.page})}">[[${dto.title}]] ([[${dto.commentCnt}]])</a></th>
+                <td>[[${dto.writer}]]</td>
+                <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                <td style="color: red;"> [[${dto.likesCnt}]]</td>
+                <td><input type="checkbox" name="checkDelete" th:value="${dto.id}"></td>
+              </tr>
+            </tbody>
+          </table>
+         
+        </div>
+   
+        <!--페이지-->
+        <div class="content__end">
+          <ul class="pagination h-100 justify-content-center align-items-center">
+              <li class="page-item" th:if="${result?.prev}">
+                <a class="page-link" th:href="@{/myboard(page= ${result.start-1})}" tabindex="-1">Prev</a>
+              </li>
+              <li th:class=" 'page-item '+ ${result?.page == page? 'active' : ''} " th:each="page : ${result?.pageList}">
+                <a class="page-link" th:href="@{/myboard(page= ${page})}">
+                  [[${page}]]
+                </a>
+              </li>
+              <li class="page-item" th:if="${result?.next}">
+                <a class="page-link" th:href="@{/myboard(page= ${result.end+1})}" tabindex="-1">Next</a>
+              </li>
+          </ul>
+        </div>
+      </section>
+      <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function(){
+            $("#checkAllDelete").click(function() {
+                if($("#checkAllDelete").is(":checked")) $("input[name=checkDelete]").prop("checked", true);
+                else $("input[name=checkDelete]").prop("checked", false);
+            });
+
+            $("input[name=chk]").click(function() {
+                var total = $("input[name=checkDelete]").length;
+                var checked = $("input[name=checkDelete]:checked").length;
+
+                if(total != checked) $("#checkAllDelete").prop("checked", false);
+                else $("#checkAllDelete").prop("checked", true); 
+            });
+
+            $('.deleteBtn').click(function(){
+                var ids = [];
+                $("input[name=checkDelete]:checked").each(function(){
+                    ids.push($(this).val());
+                });
+
+                console.log(ids);
+
+                if(ids==""){
+                    alert("선택된 항목이 존재하지 않습니다.");
+                    return false;
+                }
+
+                if(confirm("정말 삭제하시겠습니까?")){
+                    $.ajax({
+                        url : '/myboard/remove',
+                        type : 'DELETE',
+                        contentType : 'application/json; charset=utf-8',
+                        data : JSON.stringify(ids),
+                    success : function(result){
+                        alert("성공적으로 삭제되었습니다.");
+                        self.location.reload();
+                    },
+                    error : function(request, status, error){
+                            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                    }
+                    });
+                }
+            });
+        });
+      </script>
+    </th:block>
+</html>

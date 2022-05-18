@@ -21,4 +21,9 @@ public interface LikesRepository extends JpaRepository<Likes, Long>, LikesCustom
     @Transactional
     @Query("delete from Likes l where l.likeId in :ids")
     void deleteAllByIdIn(@Param("ids") List<Long> ids);
+
+    @Modifying
+    @Transactional
+    @Query("delete from Likes l where l.board.id in :ids")
+    void deleteAllByBoardIdIn(@Param("ids") List<Long> ids);
 }

@@ -7,6 +7,8 @@ import com.moon.aza.entity.Board;
 import com.moon.aza.entity.Member;
 import com.moon.aza.entity.QBoard;
 import com.moon.aza.repository.BoardRepository;
+import com.moon.aza.repository.CommentRepository;
+import com.moon.aza.repository.LikesRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +23,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
+    private final LikesRepository likesRepository;
+
+    public void checkRemove(List<String> ids){
+        List<Long> result = ids.stream().map(Long::parseLong).collect(Collectors.toList());
+        likesRepository.deleteAllByBoardIdIn(result);
+        commentRepository.deleteAllByBoardIdIn(result);
+        boardRepository.deleteAllByIdIn(result);
+    }
 
     // Querydsl 검색 처리
     public BooleanBuilder getSearch(PageRequestDTO requestDTO){
@@ -104,6 +116,27 @@ public class BoardService {
     @Transactional
     public void remove(Long id){
         boardRepository.deleteById(id);
+    }
+
+    // 페이징 처리
+    public PageResultDTO<BoardForm, Object[]> getMyList(PageRequestDTO requestDTO, Long id){
+        Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QBoard qBoard = QBoard.board;
+        BooleanExpression expression1 = qBoard.id.gt(0L);
+        BooleanExpression expression2 = qBoard.member.id.eq(id);
+        booleanBuilder.and(expression1);
+        booleanBuilder.and(expression2);
+
+        Page<Object[]> result = boardRepository.searchBoard(booleanBuilder, pageable);
+
+        Function<Object[], BoardForm> fn = (arr -> entityToDto(
+                (Board) arr[0],
+                (Long) arr[1],
+                (Long) arr[2]
+        ));
+        return new PageResultDTO<>(result, fn);
     }
 
     // 페이징 처리

@@ -47,5 +47,11 @@ public class MainController {
         model.addAttribute("result", boardService.getList(pageRequestDTO));
         return "/aza/board";
     }
-
+    /* 내가 쓴 게시글 */
+    @GetMapping("/myboard")
+    public String myBoard(PageRequestDTO pageRequestDTO,@CurrentMember Member member ,Model model){
+        log.info("/myboard");
+        model.addAttribute("result", boardService.getMyList(pageRequestDTO, member.getId()));
+        return "/aza/myboard";
+    }
 }

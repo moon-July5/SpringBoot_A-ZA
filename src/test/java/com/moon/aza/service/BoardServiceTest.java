@@ -43,4 +43,14 @@ class BoardServiceTest {
 //        resultDTO.getPageList().forEach(i -> System.out.println(i));
 
     }
+
+    @Test
+    public void pageTest3() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+        PageResultDTO<BoardForm, Object[]> resultDTO = boardService.getMyList(pageRequestDTO, 14L);
+
+        for(BoardForm boardForm : resultDTO.getDtoList()){
+            System.out.println(boardForm);
+        }
+    }
 }

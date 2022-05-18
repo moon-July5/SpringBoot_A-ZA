@@ -2,15 +2,40 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{/layout/basic}">
+        <head>
+            <style>
+                a.btn{
+                    transition: all 0.2s linear;
+                }
+                a.btn:hover{
+                    transform: scale(1.4);
+                }
+            </style>
+        </head>
         <th:block layout:fragment="content">
-            <div class="home">
+            <div class="home" style="font-family: 'cookie';">
                 <div class="alert alert-warning" role="alert" style="margin : 60px 0px 0 230px;" th:if="${member != null && !member.isValid()}">
                         회원 가입을 완료하려면 <a th:href="@{/member/email-check}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
                 </div>
-                <div class="py-5 text-center" style="margin : 60px 40px 0 200px;">
-                    <h2>A-ZA Home!!</h2>
+                <div class="pt-5 text-center" style="margin : 60px 40px 0 200px;" >
+                    <h1>A-ZA 게시판 Home!!</h1>
                 </div>
-            
+                <div class="h3 text-center" th:if="${member != null}" style="margin : 60px 40px 0 200px;">
+                    <p>환영합니다 <span style="font-weight: bold; color: rgb(18, 51, 90);">[[${member.nickname}]]</span>님</p>
+                </div>
+                <div class="col text-center fixed-bottom" style="margin : 60px 40px 100px 200px;" >
+                    <a class="btn" th:href="@{https://github.com/moon-July5/SpringBoot_A-ZA}" data-toggle="tooltip" title="GitHub" role="button" style="padding: 0; margin-right: 2%;">
+                        <img style="width: 2.5rem; height:2.5rem;" th:src="@{/imgs/github-icon.svg}"></a>
+                    <a class="btn" th:href="@{https://puzzle-moon.tistory.com/}" data-toggle="tooltip" title="Tistory" role="button" style="padding: 0; margin-right: 2%;">
+                        <img style="width: 2.5rem; height:2.5rem;" th:src="@{/imgs/tistory-logo-fill.svg}"></a>
+                    <a class="btn" th:href="@{https://github.com/moon-July5/SpringBoot_A-ZA-Docs}" data-toggle="tooltip" title="기능별 코드 설명" role="button" style="padding: 0; margin-right: 2%;">
+                        <img style="width: 2.5rem; height:2.5rem;" th:src="@{/imgs/code-icon.svg}"></a>
+                </div>
             </div>
+            <script type="text/javascript" th:inline="javascript">
+                $(document).ready(function(){
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+            </script>
         </th:block>
 </html>
