@@ -43,14 +43,7 @@
             <tbody>
               <tr th:each="dto : ${result?.dtoList}">
                 <th scope="row"><a th:href="@{/board/read(id=${dto.id}, page=${result.page})}">[[${dto.title}]] ([[${dto.commentCnt}]])</a></th>
-                  <td class="dropdown">
-                    <a class="dropdown-toggle" role="button" data-bs-toggle="dropdown" style="cursor: pointer;">
-                      [[${dto.writer}]]
-                    </a>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" style="cursor: pointer;">작성글 보기</a>
-                    </div>
-                  </td>
+                  <td>[[${dto.writer}]]</td>
                 <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
                 <td style="color: red;">[[${dto.likesCnt}]]</td>
               </tr>
