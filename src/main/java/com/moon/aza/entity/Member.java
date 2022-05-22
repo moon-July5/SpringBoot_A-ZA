@@ -36,6 +36,7 @@ public class Member extends BaseEntity {
 
     private LocalDateTime emailTokenGeneratedAt;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
     private List<Board> boards = new ArrayList<>();
 
