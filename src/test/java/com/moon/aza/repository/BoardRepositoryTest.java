@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@SpringBootTest
+/*@SpringBootTest
 class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepository;
@@ -24,3 +24,4 @@ class BoardRepositoryTest {
           System.out.println(value);
     }
 }
+*/

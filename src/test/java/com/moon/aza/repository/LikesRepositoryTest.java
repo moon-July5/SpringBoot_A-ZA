@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@SpringBootTest
+/*@SpringBootTest
 class LikesRepositoryTest {
     @Autowired
     private LikesRepository likesRepository;
@@ -20,3 +20,4 @@ class LikesRepositoryTest {
             System.out.println(value);
     }
 }
+ */

@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@SpringBootTest
+/*@SpringBootTest
 class CommentRepositoryTest {
     @Autowired
     private CommentRepository commentRepository;
@@ -22,3 +22,5 @@ class CommentRepositoryTest {
     }
 
 }
+
+ */
