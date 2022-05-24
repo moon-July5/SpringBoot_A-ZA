@@ -30,18 +30,18 @@ public class MemberController {
     @GetMapping("/email-login")
     public String emailLogin(){
         log.info("/member/email-login");
-        return "/aza/email-login";
+        return "aza/email-login";
     }
     @PostMapping("/email-login")
     public String sendLinkForEmailLogin(String email, Model model, RedirectAttributes redirectAttributes) throws MessagingException{
         Member member = memberService.findMemberByEmail(email);
         if(member==null){
             model.addAttribute("error","유효한 이메일 주소가 아닙니다.");
-            return "/aza/email-login";
+            return "aza/email-login";
         }
         if(!member.enableToSendEmail()){
             model.addAttribute("error","이메일 전송은 5분에 한 번만 전송할 수 있습니다.");
-            return "/aza/email-login";
+            return "aza/email-login";
         }
         memberService.sendLoginLink(member);
         redirectAttributes.addFlashAttribute("message","로그인 가능한 링크를 성공적으로 이메일로 전송하였습니다.");
@@ -52,17 +52,17 @@ public class MemberController {
         Member member = memberService.findMemberByEmail(email);
         if(member==null || !member.isValid(token)){
             model.addAttribute("error","로그인 할 수 없습니다.");
-            return "/aza/logged-in-by-email";
+            return "aza/logged-in-by-email";
         }
         memberService.login(member);
-        return "/aza/logged-in-by-email";
+        return "aza/logged-in-by-email";
     }
 
     /* 이메일 인증 페이지*/
     @GetMapping("/email-check")
     public String emailCheck(@CurrentMember Member member, Model model){
         model.addAttribute("email", member.getEmail());
-        return "/aza/email-check";
+        return "aza/email-check";
     }
     /* 이메일 재전송 */
     @GetMapping("/email-resend")
@@ -70,7 +70,7 @@ public class MemberController {
         if(!member.enableToSendEmail()){
             model.addAttribute("error", "인증 이메일은 5분에 한 번만 전송할 수 있습니다.");
             model.addAttribute("email", member.getEmail());
-            return "/aza/email-check";
+            return "aza/email-check";
         }
         memberService.sendVerificationEmail(member);
         return "redirect:/";
@@ -87,7 +87,7 @@ public class MemberController {
             for(String key : validatorResult.keySet()){
                 model.addAttribute(key, validatorResult.get(key));
             }
-            return "/aza/signup";
+            return "aza/signup";
         }
 
         Member newMember = memberService.signUp(signUpForm);
@@ -105,16 +105,16 @@ public class MemberController {
         log.info("email : "+email);
         if(member == null){ // 계정정보가 없으면
             model.addAttribute("error", "wrong.email");
-            return "/aza/email-verify";
+            return "aza/email-verify";
         }
         if (!token.equals(member.getEmailToken())) {
             model.addAttribute("error", "wrong.token");
-            return "/aza/email-verify";
+            return "aza/email-verify";
         }
 
         memberService.verify(member);
         model.addAttribute("nickname",member.getNickname());
-        return "/aza/email-verify";
+        return "aza/email-verify";
     }
 
     /* 객체 검증*/

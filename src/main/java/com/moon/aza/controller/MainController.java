@@ -24,20 +24,20 @@ public class MainController {
         if(member != null)
             model.addAttribute(member);
 
-        return "/aza/home";
+        return "aza/home";
     }
     /* 회원가입 페이지 */
     @GetMapping("/signup")
     public String signup(Model model) {
         log.info("/signup");
         model.addAttribute(new SignUpForm());
-        return "/aza/signup";
+        return "aza/signup";
     }
     /* 로그인 페이지 */
     @GetMapping("/login")
     public String login(){
         log.info("/login");
-        return "/aza/login";
+        return "aza/login";
     }
 
     /* 게시판 페이지 */
@@ -45,13 +45,13 @@ public class MainController {
     public String board(PageRequestDTO pageRequestDTO, Model model) {
         log.info("/board");
         model.addAttribute("result", boardService.getList(pageRequestDTO));
-        return "/aza/board";
+        return "aza/board";
     }
     /* 내가 쓴 게시글 */
     @GetMapping("/myboard")
     public String myBoard(PageRequestDTO pageRequestDTO,@CurrentMember Member member ,Model model){
         log.info("/myboard");
         model.addAttribute("result", boardService.getMyList(pageRequestDTO, member.getId()));
-        return "/aza/myboard";
+        return "aza/myboard";
     }
 }

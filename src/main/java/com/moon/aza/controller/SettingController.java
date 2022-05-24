@@ -44,7 +44,7 @@ public class SettingController {
         Member result = memberService.findMemberByEmail(email);
         if(result==null || !passwordEncoder.matches(password, member.getPassword())){
             model.addAttribute("error", "유효하지 않은 정보입니다.");
-            return "/settings/member-delete";
+            return "settings/member-delete";
         }
         memberService.deleteMember(member);
         httpSession.invalidate();
@@ -65,7 +65,7 @@ public class SettingController {
                                  Errors errors, Model model, RedirectAttributes redirectAttributes){
         if(errors.hasErrors()){
             model.addAttribute(member);
-            return "/settings/password";
+            return "settings/password";
         }
 
         memberService.changePassword(member, passwordForm.getNewPassword());
@@ -86,7 +86,7 @@ public class SettingController {
                                  Errors errors, Model model, RedirectAttributes redirectAttributes){
         if(errors.hasErrors()){
             model.addAttribute(member);
-            return "/settings/nickname";
+            return "settings/nickname";
         }
         memberService.changeNickname(member, nicknameForm.getNickname());
         redirectAttributes.addFlashAttribute("message","닉네임을 수정하였습니다.");
