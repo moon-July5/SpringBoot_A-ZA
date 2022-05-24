@@ -94,7 +94,7 @@ public class MemberController {
         // 회원가입 즉시 로그인
         memberService.login(newMember);
 
-        return "redirect:/aza/email-check";
+        return "redirect:/";
     }
 
     // 이메일 인증 확인
