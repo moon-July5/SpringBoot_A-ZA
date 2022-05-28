@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()    // 접근 제한
                 .antMatchers("/","/board","/login","/signup",
                         "/member/email-check-token","/member/email-login",
-                        "/member/login-by-email"
+                        "/member/login-by-email","/profile"
                         ).permitAll(); // 특정 경로 지정, 접근을 설정
         http.formLogin()
                 .loginPage("/login")
