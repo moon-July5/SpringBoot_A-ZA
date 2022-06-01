@@ -14,7 +14,7 @@ function find_idle_profile()
         CURRENT_PROFILE=$(curl -s http://localhost/profile)
     fi
 
-    if [ ${CURRENT_PROFILE} == "prod1" ]
+    if [ [${CURRENT_PROFILE} == "prod1"] ]
     then
       IDLE_PROFILE=prod2
     else
@@ -29,7 +29,7 @@ function find_idle_port()
 {
     IDLE_PROFILE=$(find_idle_profile)
 
-    if [ ${IDLE_PROFILE} == "prod1" ]
+    if [ ${IDLE_PROFILE} == prod1 ]
     then
       echo "8081"
     else
