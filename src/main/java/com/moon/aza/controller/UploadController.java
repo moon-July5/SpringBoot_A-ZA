@@ -1,5 +1,9 @@
 package com.moon.aza.controller;
 
+import com.moon.aza.entity.Member;
+import com.moon.aza.service.AwsS3Service;
+import com.moon.aza.support.CurrentMember;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +21,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Log4j2
+@RequiredArgsConstructor
 @RestController
 public class UploadController {
-    @Value("${image.upload.path}")
-    private String uploadPath;
+    private final AwsS3Service awsS3Service;
 
     @PostMapping("/image/upload")
-    public void postImage(@RequestParam MultipartFile upload, HttpServletResponse res, HttpServletRequest req){
+    public void postImage(@RequestParam MultipartFile upload, HttpServletResponse res, HttpServletRequest req,
+                          @CurrentMember Member member){
         log.info("/image/upload");
 
         OutputStream out = null;
@@ -41,22 +46,25 @@ public class UploadController {
             // UUID
             String uuid = UUID.randomUUID().toString();
 
+            // 저장 경로
+            String uploadPath = "upload" + File.separator + member.getId().toString();
+
             // 파일 이름 중간에 _를 이용하여 구분
             String saveName = uploadPath + File.separator + uuid + "_" + fileName;
 
-            Path savePath = Paths.get(saveName);
-
-            byte[] bytes = upload.getBytes();
-
-            // 이미지 저장
-            out = new FileOutputStream(String.valueOf(savePath));
-            out.write(bytes);
-            out.flush();
+//            Path savePath = Paths.get(saveName);
+//
+//            byte[] bytes = upload.getBytes();
+//
+//            // 이미지 저장
+//            out = new FileOutputStream(String.valueOf(savePath));
+//            out.write(bytes);
+//            out.flush();
 
             // ckEditor 로 전송
             printWriter = res.getWriter();
             String callback = req.getParameter("CKEditorFuncNum");
-            String fileUrl = "/upload/"+ uuid + "_" + fileName;
+            String fileUrl = awsS3Service.upload(upload, saveName);
             log.info("fileUrl : "+fileUrl);
 
             // 업로드 메시지 출력
