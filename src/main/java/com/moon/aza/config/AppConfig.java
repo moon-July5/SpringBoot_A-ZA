@@ -12,17 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // 그 원인이 되는 PasswordEncoder를 이렇게 따로 옮겨서 설정
 @Configuration
 public class AppConfig implements WebMvcConfigurer{
-    @Value("${resource.handler}")
-    private String resourceHandler;
 
-    @Value("${resource.location}")
-    private String resourceLocation;
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(resourceHandler)
-                .addResourceLocations(resourceLocation);
-    }
 
     /* 비밀번호 암호화 객체 */
     @Bean

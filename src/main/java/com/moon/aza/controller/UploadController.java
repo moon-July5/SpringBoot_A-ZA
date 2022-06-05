@@ -47,19 +47,12 @@ public class UploadController {
             String uuid = UUID.randomUUID().toString();
 
             // 저장 경로
-            String uploadPath = "upload" + File.separator + member.getId().toString();
+            String uploadPath = "upload/" + member.getId().toString()+"/";
 
             // 파일 이름 중간에 _를 이용하여 구분
-            String saveName = uploadPath + File.separator + uuid + "_" + fileName;
+            String saveName = uploadPath + uuid + "_" + fileName;
 
-//            Path savePath = Paths.get(saveName);
-//
-//            byte[] bytes = upload.getBytes();
-//
-//            // 이미지 저장
-//            out = new FileOutputStream(String.valueOf(savePath));
-//            out.write(bytes);
-//            out.flush();
+            log.info("saveName : "+saveName);
 
             // ckEditor 로 전송
             printWriter = res.getWriter();
