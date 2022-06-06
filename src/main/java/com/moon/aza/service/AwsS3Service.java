@@ -80,6 +80,10 @@ public class AwsS3Service {
     private Optional<File> convert(MultipartFile file) throws  IOException {
         File convertFile = new File(file.getOriginalFilename());
         log.info("convertFile : "+convertFile);
+        Runtime.getRuntime().exec("chmod 777 " + convertFile);
+        convertFile.setExecutable(true, false);
+        convertFile.setReadable(true, false);
+        convertFile.setWritable(true, false);
 
         if (convertFile.createNewFile()) {
             try (FileOutputStream out = new FileOutputStream(convertFile)) {
