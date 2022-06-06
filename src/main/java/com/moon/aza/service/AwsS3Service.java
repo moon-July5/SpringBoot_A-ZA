@@ -4,6 +4,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -24,30 +25,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class AwsS3Service {
-    private AmazonS3 amazonS3;
+    private AmazonS3Client amazonS3;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
-
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String secretKey;
-
-
-    @Value("${cloud.aws.region.static}")
-    private String region;
-
-    @PostConstruct
-    public void setS3Client() {
-        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-
-        amazonS3 = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(this.region)
-                .build();
-    }
 
     public String upload(MultipartFile multipartFile, String saveName) throws IOException {
         File uploadFile = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("파일변환실패"));
