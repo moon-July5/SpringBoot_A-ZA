@@ -37,4 +37,17 @@
 전체 흐름은 다음과 같습니다.  
 이 흐름 안에서 **등록**, **조회**, **수정**, **삭제** 동작이 진행됩니다.  
 <img src="https://user-images.githubusercontent.com/60730405/172858424-705cd5b1-33ca-4581-9f90-89e26eb68d6a.JPG" height="200px">
+
+<details>
+<summary>게시글 등록</summary>
+
+<img src="https://user-images.githubusercontent.com/60730405/172861164-168637bb-9cef-4db2-b50e-b7a508f8ba09.JPG" height="400px">  
+  
+- BoardController에는 View에서 넘어온 데이터를 전달받아 처리합니다.    
+- 여기서 tid 변수는 `임시저장된 게시글 번호`입니다. 이것을 왜 따로 요청받아 처리하냐면 임시저장된 게시글을 불러와서  
+완전히 작성 후, 실제 저장하게 된다면 임시저장된 게시글은 더 이상 사용하지 않을 것이기 때문에 삭제하기 위함입니다.  
+- 게시판으로 리다이렉트하도록 응답합니다.  
 </details>  
+</details>
+
+
