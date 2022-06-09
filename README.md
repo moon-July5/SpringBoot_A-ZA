@@ -41,13 +41,30 @@
 <details>
 <summary>게시글 등록</summary>
 
+#### Controller
 <img src="https://user-images.githubusercontent.com/60730405/172861164-168637bb-9cef-4db2-b50e-b7a508f8ba09.JPG" height="400px">  
   
-- BoardController에는 View에서 넘어온 데이터를 전달받아 처리합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d1c11ae1d7b3c8dd3141cb1908a8817f510a44c0/src/main/java/com/moon/aza/controller/BoardController.java#L81){:target="_blank"}
+- BoardController에는 View에서 넘어온 데이터를 전달받아 처리합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d1c11ae1d7b3c8dd3141cb1908a8817f510a44c0/src/main/java/com/moon/aza/controller/BoardController.java#L81)
 - 여기서 tid 변수는 `임시저장된 게시글 번호`입니다. 이것을 왜 따로 요청받아 처리하냐면 임시저장된 게시글을 불러와서  
 완전히 작성 후, 실제 저장하게 된다면 임시저장된 게시글은 더 이상 사용하지 않을 것이기 때문에 삭제하기 위함입니다.  
-- 게시판으로 리다이렉트하도록 응답합니다.  
-</details>  
+  ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d1c11ae1d7b3c8dd3141cb1908a8817f510a44c0/src/main/java/com/moon/aza/controller/BoardController.java#L84)  
+- 게시판으로 리다이렉트하도록 응답합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d1c11ae1d7b3c8dd3141cb1908a8817f510a44c0/src/main/java/com/moon/aza/controller/BoardController.java#L87)   
+
+#### Service
+<img src="https://user-images.githubusercontent.com/60730405/172870015-8e133740-7e6a-4b0a-9552-8f468bd3b972.JPG" height="450px">
+  
+**Entity 형태로 변환** ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d452c5def66ce0e2acb70a6ed7d56c31b9c5cb38/src/main/java/com/moon/aza/service/BoardService.java#L81)
+- `BoardRepository`에 전달할 수 있도록 요청받은 DTO -> Entity 형태로 변환하는 메서드입니다.  
+
+**실제 DB에 저장** ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d452c5def66ce0e2acb70a6ed7d56c31b9c5cb38/src/main/java/com/moon/aza/service/BoardService.java#L74)  
+- `saveBoard()` 메서드를 통해 Entity 형태로 변환된 데이터를 `BoardRepository`로 전달합니다.  
+
+#### Repository
+<img src="https://user-images.githubusercontent.com/60730405/172872998-4599320b-3368-4753-9108-a1d05de0aa89.JPG" height="350px" width="800px">  
+
+- Entity 형태의 데이터를 `save()` 메서드를 통해 실제 Database에 전달하여 저장합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d452c5def66ce0e2acb70a6ed7d56c31b9c5cb38/src/main/java/com/moon/aza/service/BoardService.java#L78)   
+</details> 
+
 </details>
 
 
