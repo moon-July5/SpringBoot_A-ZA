@@ -91,7 +91,40 @@
 - `List<Object[]>` 형태로 반환하도록 합니다.  
 </details>
   
+<details>
+<summary>게시글 수정/삭제</summary>
 
+#### Controller
+<img src="https://user-images.githubusercontent.com/60730405/173071970-d8207356-3007-49cc-8890-f39935c849de.JPG" height="420px" width="800px">
+
+**게시글 수정**
+- View에서 수정된 데이터를 받아 동작을 진행합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/controller/BoardController.java#L93)  
+- 수정이 정상적으로 동작하면 수정한 게시글로 리다이렉트하도록 합니다. 이때 페이지 번호와 게시글의 번호도 같이 전달하도록 합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/controller/BoardController.java#L98)  
+
+**게시글 삭제**
+- View에서 게시글의 번호를 받아 삭제 동작을 진행합니다. 성공적으로 삭제가 되면 게시판으로 리다이렉트합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/controller/BoardController.java#L102)
+
+#### Service
+<img src="https://user-images.githubusercontent.com/60730405/173076371-bdfbf34f-dccd-48fe-8e88-525fe476f280.JPG" height="370px">
+
+**게시글 수정**
+- 수정할 게시글이 존재하는지 조회합니다. 존재하면 `Title`과 `Contents`를 수정 후 다시 `BoardRepository`로 전달하여 저장합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/service/BoardService.java#L104)
+
+**게시글 삭제**
+- 게시글의 번호를 `BoardRepository`로 전달하여 DB에 삭제 요청합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/service/BoardService.java#L118)
+
+#### Repository
+<img src="https://user-images.githubusercontent.com/60730405/173079959-c707d992-0358-4993-9aa8-24ef7b0d7e66.JPG" height="370px">
+
+**수정할 게시글 조회** ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/service/BoardService.java#L105)
+- `findById()` 메서드를 통해 특정 게시글의 번호로 DB에서 `Board`를 조회합니다.  
+
+**게시글 수정 후 저장** ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/service/BoardService.java#L113)
+- `save()` 메서드를 통해 수정된 데이터를 다시 DB에 저장합니다.  
+
+**게시글 삭제** ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/6f9a7bdbdb3df91a04bfb2c2eda25e1cbb41af2b/src/main/java/com/moon/aza/service/BoardService.java#L118)
+- `deleteById()` 메서드로 특정 게시글의 번호를 통해 DB에서 삭제합니다.
+</details>
 </details>
 
 
