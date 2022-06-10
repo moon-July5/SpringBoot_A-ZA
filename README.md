@@ -60,10 +60,37 @@
 - `saveBoard()` 메서드를 통해 Entity 형태로 변환된 데이터를 `BoardRepository`로 전달합니다.  
 
 #### Repository
-<img src="https://user-images.githubusercontent.com/60730405/172872998-4599320b-3368-4753-9108-a1d05de0aa89.JPG" height="350px" width="800px">  
+<img src="https://user-images.githubusercontent.com/60730405/172872998-4599320b-3368-4753-9108-a1d05de0aa89.JPG" height="400px" width="800px">  
 
 - Entity 형태의 데이터를 `save()` 메서드를 통해 실제 Database에 전달하여 저장합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/d452c5def66ce0e2acb70a6ed7d56c31b9c5cb38/src/main/java/com/moon/aza/service/BoardService.java#L78)   
 </details> 
+  
+<details>
+<summary>게시글 조회</summary>
+
+#### Controller
+<img src="https://user-images.githubusercontent.com/60730405/172997868-e2e326b8-7a41-474b-93bd-b2560b5af39a.JPG" height="350px">
+
+- 조회한 게시물의 내용을 가져오고 View에 전달합니다.  ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/5bc189ded69c76239ac98b0a18e0f62f8152015b/src/main/java/com/moon/aza/controller/BoardController.java#L67)  
+- 사용자를 나타내는 `member`가 null이 아닐 경우, 사용자가 조회한 게시물의 추천을 눌렀는지 확인하여 반영하도록 합니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/5bc189ded69c76239ac98b0a18e0f62f8152015b/src/main/java/com/moon/aza/controller/BoardController.java#L69)  
+  
+#### Service
+<img src="https://user-images.githubusercontent.com/60730405/173000216-e20f98e0-cd69-4b51-a7f1-01a4624c8882.JPG" height="450px">
+  
+**실제 DB에서 조회** ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/5bc189ded69c76239ac98b0a18e0f62f8152015b/src/main/java/com/moon/aza/service/BoardService.java#L93)  
+- `BoardRepository`의 `getBoardWithAll()` 메서드로 조회한 게시글의 데이터들(게시글 내용, 댓글 수, 추천 수)을 모두 가져오도록 합니다.  
+
+**DTO 형태로 변환** ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/5bc189ded69c76239ac98b0a18e0f62f8152015b/src/main/java/com/moon/aza/service/BoardService.java#L160)
+- 위에서 조회한 데이터들을 DTO 형태로 변환한 후에 반환하도록 합니다.  
+  
+#### Repository
+<img src="https://user-images.githubusercontent.com/60730405/173001248-1451ef32-24a2-4609-9e0d-932366f70326.JPG" height="300px" width="800px"> 
+
+- `@Query` 애너테이션으로 특정 게시물의 데이터를 조회하는 쿼리를 구현했습니다. ⭐ [코드 확인](https://github.com/moon-July5/SpringBoot_A-ZA/blob/5bc189ded69c76239ac98b0a18e0f62f8152015b/src/main/java/com/moon/aza/repository/BoardRepository.java#L28)
+- 조회할 데이터는 게시물, 댓글 수, 추천 수이며, `left outer join`으로 기준 테이블인 `Board`와 대상 테이블인 `Comment`, `Likes`의 데이터를 누락 없이 가져오기 위함입니다.  
+- `List<Object[]>` 형태로 반환하도록 합니다.  
+</details>
+  
 
 </details>
 
