@@ -27,6 +27,8 @@
 <img src="https://user-images.githubusercontent.com/60730405/172790041-2d38a29b-210e-4e35-b77f-08b791484a8a.png" height="650px" width="750px">
 </details>  
 
+<br>
+
 ## 4.핵심 기능
 이 프로젝트는 게시판 서비스를 제공하고 있기 때문에 핵심 기능은 게시글의 **등록**, **조회**, **수정**, **삭제** 동작입니다.  
 
@@ -127,4 +129,102 @@
 </details>
 </details>
 
+<br>
+  
+## 5.핵심 트러블 슈팅
+### 5-1 검색 처리 문제
+- 게시판에서 검색 기능을 구현하기 위해 `QueryDSL`을 사용했습니다. 사용한 이유는 `QueryDSL`을 직접 사용하면서 공부하기 위한 것도 있지만  
+  검색 기능을 구현하는 데 복잡한 쿼리를 해결하기 위해 `QueryDSL`을 사용해야 하는 것이 아닐까 하는 생각으로 선택했습니다.  
+  
+- `Repository`에서 where 문의 조건을 나타내는 `Predicate` 파라미터를 이용하여 메서드를 구현하였으며, `BooleanBuilder` 형태의 데이터를  
+  전달인자로 값을 전달하여 검색 조건을 처리하였습니다.  
+- 하지만 검색 기능은 동작하지않고 계속 그 틀 안에서만 해결하려고 했습니다.  
+- `Predicate`는 조인이 필요한 쿼리는 결과를 가져오기 힘들다는 것을 알게 되었습니다.   
+
+**문제 해결**
+
+- 조인이 필요한 쿼리는 Spring Data JPA에서 제공하는 `QuerydslRepositorySupport`으로 해결할 수 있었습니다.  
+- `QueryDSL`의 **Q도메인**과 `JPQL`을 이용하여 쿼리 문을 작성하였습니다.  
+- `Sort`같은 경우는 `new OrderSpecifier`를 이용하여 처리하였습니다.  
+<details>
+<summary>코드</summary>
+
+```java
+   /**
+   * 게시글 검색 기능
+   */
+   @Override
+    public Page<Object[]> searchBoard(BooleanBuilder booleanBuilder, Pageable pageable) {
+        QBoard qBoard = QBoard.board;
+        QComment qComment = QComment.comment;
+        QLikes qLikes = QLikes.likes;
+
+        JPQLQuery<Board> jpqlQuery = from(qBoard);
+        jpqlQuery.leftJoin(qComment).on(qComment.board.eq(qBoard));
+        jpqlQuery.leftJoin(qLikes).on(qLikes.board.eq(qBoard));
+
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(qBoard, qComment.countDistinct(), qLikes.countDistinct());
+        tuple.where(booleanBuilder);
+        tuple.groupBy(qBoard);
+
+        Sort sort = pageable.getSort();
+        sort.stream().forEach(order -> {
+            Order direction = order.isAscending()? Order.ASC : Order.DESC;
+            String property = order.getProperty();
+
+            PathBuilder orderByExpression = new PathBuilder(Board.class, "board");
+            tuple.orderBy(new OrderSpecifier(direction, orderByExpression.get(property)));
+        });
+
+        long count = tuple.fetchCount();
+
+        tuple.offset(pageable.getOffset());
+        tuple.limit(pageable.getPageSize());
+
+        List<Tuple> result = tuple.fetch();
+
+        Page<Object[]> page = new PageImpl<>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()),
+                pageable, count);
+        return page;
+    }
+```
+</details>
+
+### 5-2 회원 삭제 문제
+- 회원을 삭제 하기위해 회원(Member)과 관련된 Board Entity 또한 삭제하기 위해 Member Entity의 `@OneToMany`으로 연결된 Board Entity에  
+  `orphanRemoval=true` 속성을 추가하였습니다.  
+- `orphanRemoval=true` 속성을 사용한 이유는 NULL이 된 자식을 Delete 해주는 속성으로 알고있기 때문에 Member를 삭제하면 연결된 board Entity가 NULL이 되기 때문에 자동으로 삭제될 줄 알았습니다.  
+- 하지만 `외래키 제약 조건`에 대한 예외가 발생하여 삭제가 되지 않았습니다.  
+- Board Entity에 댓글(Comment), 추천(Likes) Entity 또한 연결되어 있기 때문에 삭제가 되지 않는다는 것을 알았습니다.  
+  
+**문제 해결**  
+  
+- Board Entity와 연관된 Comment, Likes를 먼저 삭제해주는 방향으로 해결하였습니다.  
+- 먼저 Member의 id 값으로 연관된 데이터를 조회한 후에 존재하면 삭제합니다.  
+<details>
+<summary>코드</summary>
+
+```java
+   /**
+   * 회원 삭제
+   */
+  public void deleteMember(Member member){
+        List<Long> boardIds = boardRepository.findByMemberId(member.getId());
+        List<Long> likesIds = likesRepository.findByMemberId(member.getId());
+        List<Long> commentIds = commentRepository.findByMemberId(member.getId());
+        if(!commentIds.isEmpty()){
+            commentRepository.deleteAllByIdIn(commentIds);
+        }
+        if(!likesIds.isEmpty()){
+            likesRepository.deleteAllByIdIn(likesIds);
+        }
+        if(!boardIds.isEmpty()){
+            boardRepository.deleteAllByIdIn(boardIds);
+        }
+        memberRepository.deleteById(member.getId());
+    }
+```
+</details>
+
+## 6.기타 트러블 슈팅
 
