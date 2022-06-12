@@ -226,5 +226,215 @@
 ```
 </details>
 
+<br>
+  
 ## 6.기타 트러블 슈팅
+<details>
+<summary>로컬에서 개발 시 MySQL Timezone 문제</summary>
 
+로컬에서 MySQL을 통해 Database를 개발하게 되면 데이터 저장 시 시간이 `Asia/Seoul`로 되지 않고  
+`System`으로 되어 있어 시간이 한국의 현재 시간과 일치하지 않는 문제가 발생했습니다.  
+  
+이 Timezone을 `Asia/Seoul`로 변경하기 위해 [링크](https://dev.mysql.com/downloads/timezones.html)에 접속하여 운영체제와 MySQL 버전에 맞게 다운합니다.  
+다운받은 파일을 `MySQL Workbench`에서 쿼리를 실행합니다.  
+쿼리가 성공적으로 실행이 됐다면 아래의 코드를 입력하여 Timezone을 `Asia/Seoul`로 설정합니다.  
+```
+SET global time_zone = 'Asia/Seoul';
+SET time_zone = 'Asia/Seoul';
+```
+</details>
+  
+<details>
+<summary>네이버 이메일 전송 에러</summary>
+
+회원가입 후 이메일 인증을 하기 위해 사용자에게 이메일을 보내는 데 STMP 전송 오류가 발생했습니다.  
+
+오류가 발생한 이유는 제 네이버 계정에 2차 인증이 걸려있었기 때문에 제 이메일을 통해 전송할 수 없었습니다. `application.properties` 파일에 네이버 계정의 비밀번호를 입력하는 것이 아닌 애플리케이션 비밀번호를 저장해야 합니다.  
+애플리케이션 비밀번호를 설정하기 위해 네이버에서 `네이버ID > 보안설정 > 기본보안설정 > 2단계 인증 > 관리`에 이동하여 `애플리케이션 비밀번호 관리`에서 생성해야 합니다.  
+그 후 생성된 비밀번호를 설정 파일에 저장해야 합니다.    
+</details>
+
+<details>
+<summary>이메일 재전송 시간 문제</summary>
+
+회원가입을 하게되면 본인의 이메일로 회원가입 인증메일이 전송되게 됩니다.  
+이때, 받지 못한 사용자들에게 다시 재전송할 수 있는 기능이 존재하는데, 이게 `재전송 버튼`을 계속 누르게 되면  
+계속 전송할 수 있게 되어 이메일이 무분별하게 쌓일 수 있게 되는 문제가 발생했습니다.  
+  
+이것을 해결하기 위해 이메일을 전송한 지 5분이 지났는지 확인 후 보낼 수 있게 코드를 구현했습니다.  
+```java
+public class Member extends BaseEntity {
+  ...생략
+
+    // 이메일을 보낸 지 5분이 지났는지 확인
+    public boolean enableToSendEmail(){
+        return this.emailTokenGeneratedAt.isBefore(LocalDateTime.now().minusMinutes(5));
+    }
+}
+```
+</details>
+  
+<details>
+<summary>build.gradle에서 QueryDSL 설정 에러</summary>
+QueryDSL을 사용하기 위해 build.gradle에서 컴파일하여 설정을 하는데 에러가 발생하여 컴파일이 되지 않는 에러가 발생했습니다.    
+
+이는 Spring Boot 2.6이상 Gradle 5.0이상 설정 방법이 약간 다르기 때문에 발생한 문제였습니다.  
+build.gradle에서 코드는 다음과 같습니다.  
+```
+ buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+...생략
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+```
+</details>
+  
+<details>
+<summary>CKEditor4 Refused to display in a frame because it set 'X-Frame-Options' to 'DENY' 에러</summary>
+게시글에 글을 작성하는 데 저는 텍스트 편집기인 `CKEditor4`를 사용하였습니다.  
+하지만 `CKEditor4 Refused to display in a frame because it set 'X-Frame-Options' to 'DENY'` 에러가 발생하였습니다.  
+  
+이것은 Spring Security를 적용하면 기본적으로 X-Frame-Options Click jacking 공격 막기 설정이 되어있기 때문이였습니다.  
+대략 사용자가 어떤 웹 페이지에서 링크를 눌렀을 때 의도했던 것과는 다른 동작을 하게 한다해서 이를 `Click jacking`이라고 합니다.  
+이를 해결해 줄 수 있는 방법이 `X-Frame-Options Header`입니다.  
+
+이는 Spring Security 설정 파일에서 아래와 같이 `sameOrigin` 옵션을 사용해서 해결합니다.  
+```java
+   @Override
+   protected void configure(HttpSecurity http) throws Exception {
+        ...생략
+  
+        // X-Frame-Options Click jacking 공격 막기 설정
+        // 해당 페이지와 동일한 origin에 해당하는 frame만 
+        http.headers()
+                .frameOptions().sameOrigin();
+  }
+```
+</details>
+
+<details>
+<summary>CKEditor4 이미지 업로드 403 Forbidden Error </summary>
+
+CKEditor4를 통해 이미지를 업로드하는데 `403 Forbidden Error`가 발생하였습니다.  
+
+다른 도메인과 resource를 공유하는 `cors`와 요청을 위조하여 사용자의 권한을 이용해 서버에 대한 악성공격을 하는 `csrf`를 disable 하는 방식으로  
+해결하였습니다.  
+```java
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      ...
+        // 'ckeditor4' 이미지 업로드 시 403 Forbidden Error로 인해 설정
+        http.cors().and()
+                .csrf().disable();
+    }
+```
+</details>
+
+<details>
+<summary>form method put/delete 에러</summary>
+
+HTML에서 form 태그를 구성할 때 method를 `PUT/DELETE`를 구성하여 submit할 때, 에러가 발생했습니다.  
+
+이를 해결하기 위해 HTML form 태그 하위에 `<input type="hidden" name="_method" value="put"/>`와 같이 Hidden 타입으로  
+HTTP Method를 전달합니다.  
+
+하지만 Spring Boot 2.2 이상 버전에서는 자동으로 구성되지 않아 `application.properties`에 아래와 같이 추가 설정 값이 필요합니다.  
+```
+# put, delete method
+spring.mvc.hiddenmethod.filter.enabled = true
+```
+</details>
+
+<details>
+<summary>EC2 Instance Metadata Service is disabled 에러</summary>
+
+AWS와 Spring Boot를 연동할 때 `spring-cloud-start-aws` 패키지를 사용할 때, 나온 에러 메시지입니다.  
+EC2의 메타데이터를 읽다가 발생하는 에러입니다.  
+
+이를 해결하기 위해 로컬에서 실행할 때 IntelliJ에서 `Run -> Edit Configurations -> Modify Options -> add VM Options` 순으로 선택합니다.  
+여기서 설정값으로 `-Dcom.amazonaws.sdk.disableEc2Metadata=true`으로 주고 해결합니다.  
+
+하지만 EC2 서버에서 실행할 때도 똑같은 에러 메시지가 발생했습니다.  
+이는 Application.java에서 추가적으로 아래와 같이 설정할 필요가 있었습니다.  
+```java
+  ublic class AzaApplication {
+	static {
+		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(AzaApplication.class, args);
+	}
+}
+```
+또한 추가적으로 에러 로그를 단순히 보이고 싶지 않을 때 아래와 같이 `application.properties`에 추가 설정을 하여 해결했습니다.   
+```
+  logging.level.com.amazonaws.util.EC2MetadataUtils: error
+```
+</details>
+  
+<details>
+<summary>AWS S3 이미지 업로드 에러(Permission denied)</summary>
+
+로컬에서 정상적으로 AWS S3에 이미지가 업로드된 것을 확인 후, EC2 서버에서 이미지 업로드를 시도했지만  
+`File에 대한 IOExceiption : permission denied`에러가 발생했습니다.  
+
+왜 발생했는지 생각하면, 초기 코드에 이미지가 요청되면 `File.createNewFile()` 메서드로 프로젝트 내에 이미지를 먼저 업로드하고 AWS S3 버킷 안에 이미지가 업로드되고 공간 낭비를 해소하기 위해 프로젝트 내에 이미지를 삭제하는 절차를 가졌습니다.  
+  
+프로젝트 내에 이미지를 저장하는데 EC2 서버 내에서는 접근이 거부되서 아예 MultipartFile 형식을 File 형식으로 변환할 수 없고 그렇게 되면 업로드가 되지 않아 발생하는 문제였습니다.  
+  
+이를 해결하기 위해 바로 AWS S3으로 전달하여 업로드하도록 코드를 수정할 필요가 있었습니다.  
+
+아래는 초기에 작성했던 코드입니다.  
+```java
+    private String putS3(File uploadFile, String saveName) {
+        amazonS3.putObject(new PutObjectRequest(bucket, saveName, uploadFile)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
+        return amazonS3.getUrl(bucket, saveName).toString();
+    }
+```
+이번에는 수정한 코드입니다.  
+```java
+      private String putS3(MultipartFile uploadFile, String saveName, ObjectMetadata metadata) throws IOException {
+        try {
+            amazonS3.putObject(new PutObjectRequest(bucket, saveName,
+                    uploadFile.getInputStream(), metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+        } catch (IOException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 실패");
+        }
+        return amazonS3.getUrl(bucket, saveName).toString();
+    }
+```
+수정된 곳은 S3에 업로드하는 `putS3()` 메서드에 `ObjectMetadata` 객체를 추가하였으며,  
+그리고 MultipartFile 형식의 파일을 읽어오는 `getInputStream()` 메서드를 사용하였습니다.  
+
+이렇게 해서 프로젝트 내에 이미지를 업로드하고 삭제하는 절차를 가지지 않고 바로 S3에 이미지를 업로드할 수 있게 해결했습니다.  
+</details>
+
+<br>
+
+## 7. 느낀점 
