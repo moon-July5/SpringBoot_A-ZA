@@ -1,6 +1,6 @@
 # ⭐ A-ZA Board
 > 웹의 기본 소양이 되는 CRUD 게시판을 구현했습니다.  
-> [azaboard.ga](azaboard.ga)
+> [azaboard.ga](http://azaboard.ga)
 <br>  
 
 ## 1.제작기간 & 참여인원  
