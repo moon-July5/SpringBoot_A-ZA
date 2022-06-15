@@ -144,7 +144,7 @@
 **문제 해결**
 
 - 조인이 필요한 쿼리는 Spring Data JPA에서 제공하는 `QuerydslRepositorySupport`으로 해결할 수 있었습니다.  
-- `QueryDSL`의 **Q도메인**과 `JPQL`을 이용하여 쿼리 문을 작성하였습니다.  
+- `QueryDSL`의 Q도메인과 `JPQL`을 이용하여 쿼리 문을 작성하였습니다.  
 - `Sort`같은 경우는 `new OrderSpecifier`를 이용하여 처리하였습니다.  
 <details>
 <summary>코드</summary>
@@ -191,8 +191,7 @@
 </details>
 
 ### 5-2 회원 삭제 문제
-- 회원을 삭제 하기위해 회원(Member)과 관련된 Board Entity 또한 삭제하기 위해 Member Entity의 `@OneToMany`으로 연결된 Board Entity에  
-  `orphanRemoval=true` 속성을 추가하였습니다.  
+- 회원을 삭제 하기전에 회원(Member)과 관련된 Board Entity 또한 삭제하기 위해 Member Entity의 `@OneToMany`으로 연결된 Board Entity에 `orphanRemoval=true` 속성을 추가하였습니다.  
 - `orphanRemoval=true` 속성을 사용한 이유는 NULL이 된 자식을 Delete 해주는 속성으로 알고있기 때문에 Member를 삭제하면 연결된 board Entity가 NULL이 되기 때문에 자동으로 삭제될 줄 알았습니다.  
 - 하지만 `외래키 제약 조건`에 대한 예외가 발생하여 삭제가 되지 않았습니다.  
 - Board Entity에 댓글(Comment), 추천(Likes) Entity 또한 연결되어 있기 때문에 삭제가 되지 않는다는 것을 알았습니다.  
